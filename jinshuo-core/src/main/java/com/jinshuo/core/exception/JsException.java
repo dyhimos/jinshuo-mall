@@ -46,6 +46,13 @@ public  class JsException extends RuntimeException {
         this.retMsg = retMsg;
         this.retCode = retCode;
     }
+
+    public JsException(int retCode, String retMsg) {
+        super(retMsg);
+        this.retMsg = retMsg;
+        this.retCode = retCode;
+    }
+
     public JsException(String retMsg, int retCode, Throwable e) {
         super(retMsg, e);
         this.retMsg = retMsg;
@@ -69,14 +76,14 @@ public  class JsException extends RuntimeException {
 
 
 
-    public JsException(YmReturnCode resultCode, Throwable e) {
+    public JsException(JsReturnCode resultCode, Throwable e) {
         super(resultCode.getMsg(), e);
 
         this.errorMsg = resultCode.getMsg();
         this.errorCode = resultCode.getCode();
     }
 
-    public JsException(YmReturnCode resultCode) {
+    public JsException(JsReturnCode resultCode) {
         this.errorMsg = resultCode.getMsg();
         this.errorCode = resultCode.getCode();
     }

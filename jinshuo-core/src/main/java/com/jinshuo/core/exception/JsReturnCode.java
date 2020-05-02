@@ -1,12 +1,12 @@
 package com.jinshuo.core.exception;
 
 /**
- * @Classname YmReturnCode
+ * @Classname JsReturnCode
  * @Description TODO
  * @Date 2019/6/20 17:36
  * @Created by dyh
  */
-public enum YmReturnCode implements ReturnCode{
+public enum JsReturnCode implements ReturnCode{
 
     /**
      * SYS 000000 error code enum.
@@ -79,13 +79,13 @@ public enum YmReturnCode implements ReturnCode{
     private  String msg;
 
 
-    YmReturnCode(int code, String msg) {
+    JsReturnCode(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public static YmReturnCode getEnum(int code) {
-        for (YmReturnCode ele : YmReturnCode.values()) {
+    public static JsReturnCode getEnum(int code) {
+        for (JsReturnCode ele : JsReturnCode.values()) {
             if (ele.getCode()== code) {
                 return ele;
             }

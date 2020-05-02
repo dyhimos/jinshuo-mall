@@ -28,7 +28,7 @@ public abstract class JsExceptionHandler {
     @ResponseBody
     WrapperResponse unknowException(Exception e){
         log.error("Exception："+new Date()+"："+e.getMessage(),e);
-        return WrapperResponse.fail(YmReturnCode.SYS100099.getCode(),YmReturnCode.SYS100099.getMsg());
+        return WrapperResponse.fail(JsReturnCode.SYS100099.getCode(), JsReturnCode.SYS100099.getMsg());
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class JsExceptionHandler {
     @ResponseBody
     WrapperResponse notFoundException(NoHandlerFoundException e) {
         log.error("ExceptionHandler:"+e.getMessage(),e);
-        return WrapperResponse.fail(YmReturnCode.SYS100001.getCode(),YmReturnCode.SYS100001.getMsg());
+        return WrapperResponse.fail(JsReturnCode.SYS100001.getCode(), JsReturnCode.SYS100001.getMsg());
     }
 
 
@@ -67,6 +67,6 @@ public abstract class JsExceptionHandler {
     WrapperResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         FieldError fieldError = e.getBindingResult().getFieldError();
         log.error("参数校验异常:{}({})"+new Date(),fieldError.getDefaultMessage(),fieldError.getField());
-        return WrapperResponse.fail(YmReturnCode.SYS100008.getCode(),fieldError.getDefaultMessage());
+        return WrapperResponse.fail(JsReturnCode.SYS100008.getCode(),fieldError.getDefaultMessage());
     }
 }

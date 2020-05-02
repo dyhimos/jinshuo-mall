@@ -1,7 +1,7 @@
 package com.jinshuo.core.response;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.jinshuo.core.exception.YmReturnCode;
+import com.jinshuo.core.exception.JsReturnCode;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -41,8 +41,8 @@ public class WrapperResponse<T> implements Serializable {
      */
     public static <T> WrapperResponse<T> success(T data) {
         WrapperResponse<T> resp = new WrapperResponse<>();
-        resp.setRetCode(YmReturnCode.SYS000000.getCode());
-        resp.setRetMsg(YmReturnCode.SYS000000.getMsg());
+        resp.setRetCode(JsReturnCode.SYS000000.getCode());
+        resp.setRetMsg(JsReturnCode.SYS000000.getMsg());
         resp.setResult(data);
         return resp;
     }
@@ -61,7 +61,7 @@ public class WrapperResponse<T> implements Serializable {
      */
     public static <T> WrapperResponse<T> fail(String error) {
         WrapperResponse<T> resp = new WrapperResponse<>();
-        resp.setRetCode(YmReturnCode.SYS000001.getCode());
+        resp.setRetCode(JsReturnCode.SYS000001.getCode());
         resp.setRetMsg(error);
         return resp;
     }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jinshuo-admin/jinshuo-admin.iml" filepath="$PROJECT_DIR$/jinshuo-admin/jinshuo-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jinshuo-core/jinshuo-core.iml" filepath="$PROJECT_DIR$/jinshuo-core/jinshuo-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jinshuo-domain/jinshuo-domain.iml" filepath="$PROJECT_DIR$/jinshuo-domain/jinshuo-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jinshuo-front/jinshuo-front.iml" filepath="$PROJECT_DIR$/jinshuo-front/jinshuo-front.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jinshuo-mall.iml" filepath="$PROJECT_DIR$/jinshuo-mall.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jinshuo-service/jinshuo-service.iml" filepath="$PROJECT_DIR$/jinshuo-service/jinshuo-service.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.jdom:jdom:unknown">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../maven/org/jdom/jdom/unknown/jdom-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../maven/org/jdom/jdom/unknown/jdom-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../maven/org/jdom/jdom/unknown/jdom-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

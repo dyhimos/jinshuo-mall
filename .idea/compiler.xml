@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jinshuo-admin" />
+        <module name="jinshuo-core" />
+        <module name="jinshuo-domain" />
+        <module name="jinshuo-front" />
+        <module name="jinshuo-mall" />
+        <module name="jinshuo-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jinshuo-admin" target="1.8" />
+      <module name="jinshuo-core" target="1.8" />
+      <module name="jinshuo-domain" target="1.8" />
+      <module name="jinshuo-front" target="1.8" />
+      <module name="jinshuo-mall" target="1.8" />
+      <module name="jinshuo-service" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

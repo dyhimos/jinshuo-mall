@@ -1,0 +1,113 @@
+server:
+  port: 9528
+spring:
+  rabbitmq:
+      host: 120.25.244.149
+      port: 5672
+      username: mquser
+      password: yimai@123456
+  #Redis服务
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    host: 120.25.244.149
+    #配置服务器连接密码（默认为空）
+    password: yimai@123456
+    port: 6379
+    pool:
+      #配置连接池最大连接数(使用负值表示没有限制)
+      max-active: -1
+      #配置连接池最大阻塞等待时间
+      max-wait: -1
+      #配置连接池中的最大空闲连接
+      max-idle: 5
+      #配置连接池中的最小空闲连接
+      min-idle: 0
+    #配置连接超时时间（毫秒）
+    timeout: 3000
+
+  #数据库连接
+  datasource:
+    url: jdbc:mysql://111.229.219.249:13306/ym-mall-wool?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 1a457259552B@
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+  application:
+    name: ym_zssy_study
+mybatis:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  typeHandlersPackage:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+#Redis cache 过期时间设置
+redis:
+  cache:
+    expiration: 3600
+
+
+management:
+    security:
+      enabled: false
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+#微信信息配置
+wxconfig:
+      app_id: wxb47abcda9be79adc
+      #服务号的应用密钥
+      app_secret: 8d8c2bebc3c26712f0981e75ac47a385
+      #服务号的配置token
+      token: XXXXXXXXXXXXXXXX
+      #商户号
+      mch_id:  1579862131
+      #API密钥
+      api_key: B363B944FC6FFA08642125723320C915
+      #签名加密方式
+      sign_type: MD5
+      #微信支付证书路径
+      cert_path: D://cert//spring//apiclient_cert.p12
+      #发送模板跳转域名
+      domain: http://www.gzymtech.com
+      #支付回调路径
+      noncestr: https://wool.gzymtech.com/v1/wx/gd/notify
+#微信信息配置
+alipayconfig:
+      #应用APPID
+      APP_ID: 2021001145648114
+      #APP私钥
+      APP_PRIVATE_KEY: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCaqQ8lAVWU3FcmidDqUOJR81TNnmtkDywFsb/9dyWMU9MM6owH7g0An5qF63sMOiWdEU4SyKREaE/NjUS9LpFEW84Nx6qoRcbIVn2nYuW1iQZy8XK4Qf10fFY8/SYMWXiFyA+unv+CC1f7VyX8KunI+x6p4Jc43hBNpwvTEJafekoh6V2dFRU6tuvUAofrfI8qW3xU4nLAOYK0Cio+UJ5jpZ8Ao37cBrS8VsHhzX49T/h0Mkz9VTEVcYUB/P0FNbsRoxhcqf8bBbN1A5V8miiB3jiIamCNmdHQzJOgGmdoifEWYUKTIkV3D4DOUa+b+vqOAufGbdSOUAbXZJ9eKW3RAgMBAAECggEAeDGyp1umGw4yXKz2Q2Ogv3eQDEx1wUlZOQOu5VjXQXtTpdISCYejazyeZj1fX11BJhPwzQBJSTCX9HM5XJz4IFwIgwUNR8ESf1dYR+HAC5j1/hZOxYvjYcfPbY5/J1HRLIcSSO8gOvx938MWribbkWo3pmX4oCVUHkUYF2vo4v56szf18nTDk67mO/sQij+yNiMmMZqudzF1q+6FH1WCdtWnZKteu5hOc2m8kzmfAFHwaHi84IBgPkCfLy1CWCqqsDd8RWkJQNdoxDqXsPZg5VtBnVAPCFf4izmI2LZNJ6cV5L7Je4qQH60+vjbitARDDTJOqEWeLCeDK27nCkCXUQKBgQDkRXV5Zprih0OmJK4bzzPe86f/3vH4wRQczMmNHgXWLISHYdMLq3DWwa+gPL6PSOe1txWHbhzhGJDvxpAFC7H1O9Ymap9TuYV5ygskSxymma0pboPoIdm7sRZc8FAPqN6wsOcarwTzIXAtMXp7Z9mnBNwH7NYmmnvpVkbtrF3PpwKBgQCtcoZh5gryD3Wijn3L2FO5SsJh6wH85HeA5c3JlvCkKjiarLu5dnnezgnT/lWsLOsaGArpVy4s+KvCXpFAPu7b6pQVxLzt4Spyv5oHQtSngU/3Rgr/9+ixzYLYKSE6bOoiCdBgQSQoubgvQ93k9E0exbO2XCJp2NvmPYgotjNFxwKBgQCpE4GFoCgMrZ+/yd9kHb8P3m2LKfkUBP7+rfiDm786+dJX7G9Db4KurtuE1jlXK+rkP22k2DxvxaBk2TAHbLgtKlreLY9BlmJ06OADy9a215DY5VCyeZAqY2prAFxsnOoE+aLTstr5ssTB1KoiCbO+7+yBujyMb1RkalEy7b62dQKBgFayJgWNLO9tVslYG/zmNoMpoRu8khPMRweA1mnrLoGAMSbvLC450BTUPAlg2YXkNeenGN0lnIkSCxhumH/adR4rlLWEz0LAB62vo9f5Sb4oXsYklp73VbJ6HOrbNCa2BhnZefSC2wYYPr4xWBp3Go1FGN0QFIt/v/rHyuU+nUZFAoGBAKqMGpOey3B1GwRf9yQTd8oEf6P9PCq+khdKZK61thb5G7Tayy1rSwyKIRexvPREfLfXzS7VLeGdpy32iNICoG782w6jXqTQ/qdEN3xPQ3nFi3vFUyKsFyqbRxpviRrBws6aZkRXosYt8MhmGuNHTGSLLogJENcOySOPWYQxMR5R
+      #公钥
+      ALIPAY_PUBLIC_KEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmPsODXaaNKeIZl+q6BPYz56+8dJn2TSZyMMoE0DnZUKBC+9YY8wMOU+tg6RJ58aZCPbQkOuZDw0sUGudP910ud1ORC87O4oBMdJukwriyFRWX0op8lSDsDfcnUDRvP4y2jTlGJayg2jowXlrRozrdfZ8uuy6MeW//VxixykL1QQUGKiaYkktlmSPtccWrAUVXFGk0ox9Iewfu0zK8pkVVnnp+m5+fkpykggGmiOTr0glwmMiggH4sOKgB84yNQAKXgpvd/o7m2zCxf1pEYTX9/rY70+R3QH/tagyXqtzqWY3cMqJFY45ep3sHlEfVhn7p5n9lm3fJ5qNw4OLZqjyZwIDAQAB
+      #编码
+      CHARSET:  UTF-8
+      #异步通知页面
+      NOTIFY_URL: https://wool.gzymtech.com/v1/wx/gd/aync_notify
+
+wx_access_token_url: https://api.weixin.qq.com/cgi-bin/token
+wx_ticket_url: https://api.weixin.qq.com/cgi-bin/ticket/getticket
+
+#核销详情页地址
+checkDetailDomain: http://ym.h5.ot.ymzby.com
+#短链接生成地址
+shortDomain: http://t1.ymzby.com/compress
+resource:
+  url:  http://192.168.2.114:80/10088

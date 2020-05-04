@@ -66,14 +66,14 @@ public class OrderVerificationCodeLogQueryService {
     }
 
 
-    public OrderVerificationCodeLogDto setSpuInfo(OrderVerificationCodeLogDto dto){
+    public OrderVerificationCodeLogDto setSpuInfo(OrderVerificationCodeLogDto dto) {
         GoodsOrderDetail detail = goodsOrderDetailRepo.findById(dto.getGoodsOrderDetailId());
         dto.setSpuId(detail.getGoodsSpuId());
         dto.setSpuName(detail.getGoodsName());
         dto.setCostPrice(detail.getCostPrice());
         SpuQry spuQry = SpuQry.builder().spuId(dto.getSpuId()).build();
         SpuDto spuDto = spuQueryService.findByExemple(spuQry);
-        if (null!=spuDto.getPictureUrl()) {
+        if (null != spuDto.getPictureUrl()) {
             dto.setUrl(spuDto.getPictureUrl());
         }
         dto.setMemberName(goodsOrderQueryService.findGoodsOrderById(new GoodsOrderId(dto.getGoodsOrderId())).getMemberName());

@@ -1,14 +1,16 @@
 package com.jinshuo.mall.admin;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @EnableSwagger2
+@EnableAutoConfiguration
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.jinshuo.mall.service","com.jinshuo.mall.front"})
+@ComponentScan(basePackages = {"com.jinshuo.mall.admin","com.jinshuo.mall.service","com.jinshuo.mall.front"})
 @MapperScan(basePackages = {"com.jinshuo.mall"})
 public class JinshuoAdminApplication {
 

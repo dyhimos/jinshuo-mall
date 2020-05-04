@@ -1,4 +1,4 @@
-package com.jinshuo.mall.admin.config;
+package com.jinshuo.mall.admin.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -39,7 +39,6 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException;
 import org.springframework.security.oauth2.provider.*;
-import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,8 +98,8 @@ public class UserAccountCmdService {
     @Autowired(required = false)
     private ClientDetailsService clientDetailsService;
 
-    @Autowired(required = false)
-    private AuthorizationServerTokenServices authorizationServerTokenServices;
+    //@Autowired(required = false)
+    //private AuthorizationServerTokenServices authorizationServerTokenServices;
 
     @Autowired
     private LoginReportComService loginReportComService;
@@ -168,8 +167,8 @@ public class UserAccountCmdService {
 
         OAuth2Authentication oAuth2Authentication = new OAuth2Authentication(oAuth2Request, authentication);
         //创建token
-        OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
-        return token;
+        //OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
+        return null;
     }
 
 
@@ -801,11 +800,11 @@ public class UserAccountCmdService {
 
         OAuth2Authentication oAuth2Authentication = new OAuth2Authentication(oAuth2Request, authentication);
         //创建token
-        OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
+        //OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
         MerchantLoginInfoDto dto = MerchantLoginInfoDto.builder()
                 .shops(shopQueryService.getList(userAccount.getMerchantId()))
                 .username(userAccount.getUsername())
-                .token(token.getValue())
+                .token(null)
                 .avatar("/10088/1/129603212297633792/co/39d0b82f-0200-4bbc-9106-c811858bb08d.png")
                 .build();
         return dto;

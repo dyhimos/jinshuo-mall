@@ -1,5 +1,6 @@
 package com.jinshuo.mall.service.order.service.command;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jinshuo.core.exception.finance.FcBizException;
 import com.jinshuo.core.exception.order.OcBizException;
@@ -49,11 +50,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author dongyh
  * @Classname GoodsOrderCmdService
  * @Description 产品订单
  * @Date 2019/7/8 15:37
- * @Created by dongyh
+ * @Created by mgh
+ * @author mgh
  */
 @Slf4j
 @Service
@@ -113,8 +114,8 @@ public class GoodsOrderCmdService {
     @Autowired
     private GoodsOrderRepo goodsOrderRepo;
 
-    //@Autowired
-    //private GoodsOrderMsgMQ goodsOrderMsgMQ;
+/*    @Autowired
+    private GoodsOrderMsgMQ goodsOrderMsgMQ;*/
 
     @Autowired
     private GoodsExpresssRepo goodsExpresssRepo;
@@ -147,22 +148,22 @@ public class GoodsOrderCmdService {
     private GoodsOrderSimpleRepo goodsOrderSimpleRepo;
 
 
-    public String test() {
+    public String test(){
         /*List<Long> ids = new ArrayList<>();
         ids.add(12345L);
         ids.add(23456L);
         log.info("发送mq====================");
         //发送mq
         goodsOrderMsgMQ.completeProfit(ids,String.valueOf(1*60*1000));*/
-        RedisUtil.setex("test", "test", 1 * 60);
+        RedisUtil.setex( "test", "test", 1 * 60);
         return "";
     }
 
-    public String delKey() {
-        try {
+    public String delKey(){
+        try{
             RedisUtil.del("test");
             return "";
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
         return "";
@@ -171,11 +172,11 @@ public class GoodsOrderCmdService {
 
     /**
      * 新增订单
-     *
      * @param cmd
      */
     @Transactional
     public GoodsOrderIdDto save(GoodsOrderCreateCmd cmd) throws OcBizException {
+        log.info("新增订单参数：{}",JSON.toJSONString(cmd));
         //订单id
         Long goodsOrderId = CommonSelfIdGenerator.generateId();
 
@@ -189,11 +190,11 @@ public class GoodsOrderCmdService {
 
         //店铺id
         Long shopId = user.getShopId();
-        if (shopId == null) {
+        if(shopId==null){
             shopId = 10066L;
         }
         //优惠券金额
-        BigDecimal couponAmount = new BigDecimal("0");
+        BigDecimal couponAmount =new BigDecimal("0");
 
 
         List<TargetCmd> targetCmds = cmd.getGoodsOrderDetailCmdList().stream()
@@ -206,13 +207,13 @@ public class GoodsOrderCmdService {
                 }).collect(Collectors.toList());
         CouponLogsCreateCmd couponLogsCreateCmd = null;
         //检查是否使用优惠券
-        if (StringUtils.isNotBlank(cmd.getCouponReceiveId())) {
+        if(StringUtils.isNotBlank(cmd.getCouponReceiveId())){
             couponLogsCreateCmd = CouponLogsCreateCmd.builder()
                     .couponReceiveId(Long.valueOf(cmd.getCouponReceiveId()))
                     .memId(userId)
                     .targetCmds(targetCmds)
                     .build();
-        } else {
+        }else{
             couponLogsCreateCmd = CouponLogsCreateCmd.builder()
                     .memId(userId)
                     .targetCmds(targetCmds)
@@ -234,19 +235,19 @@ public class GoodsOrderCmdService {
 
                     SpuDto spuDto = spuQueryService.findByExemple(spuQry);
 
-                    SpuOtherDto spuOtherDto = spuDto.getSpuOtherDto();
+                    SpuOtherDto spuOtherDto =spuDto.getSpuOtherDto();
                     //运费
                     BigDecimal logisticsFee = null;
-                    if (spuOtherDto == null) {
+                    if(spuOtherDto==null){
                         logisticsFee = new BigDecimal("0");
-                    } else {
+                    }else{
                         logisticsFee = spuOtherDto.getCourierFee();
                     }
 
-                    GoodsOrderDetail goodsOrderDetail = new GoodsOrderDetail().save(
+                    GoodsOrderDetail goodsOrderDetail  = new GoodsOrderDetail().save(
                             new GoodsOrderDetailId(CommonSelfIdGenerator.generateId()),
                             //供应商Id
-                            spuDto.getSupplierId() == null ? 1688 : Long.valueOf(spuDto.getSupplierId()),
+                            spuDto.getSupplierId()==null? 1688: Long.valueOf(spuDto.getSupplierId()),
                             //供应商名称
                             spuDto.getSupplierName(),
                             //成本价
@@ -281,35 +282,35 @@ public class GoodsOrderCmdService {
                             spuDto.getReserveAddress(),
                             spuDto.getAutoSendCode()
                     );
-                    return goodsOrderDetail;
-                }).collect(Collectors.toList());
+            return goodsOrderDetail;
+        }).collect(Collectors.toList());
 
         GoodsOrderAddress goodsOrderAddress = null;
-        if (cmd.getGoodsOrderAddressCmd() != null) {
+        if(cmd.getGoodsOrderAddressCmd()!=null){
             //地址信息
-            goodsOrderAddress = new GoodsOrderAddress().save(new GoodsOrderAddressId(CommonSelfIdGenerator.generateId()),
-                    new GoodsOrderId(goodsOrderId),
-                    cmd.getGoodsOrderAddressCmd().getUserName(),
-                    cmd.getGoodsOrderAddressCmd().getUserAddress(),
-                    cmd.getGoodsOrderAddressCmd().getUserPhone()
-            );
+            goodsOrderAddress =new GoodsOrderAddress().save( new GoodsOrderAddressId(CommonSelfIdGenerator.generateId()),
+                            new GoodsOrderId(goodsOrderId),
+                            cmd.getGoodsOrderAddressCmd().getUserName(),
+                            cmd.getGoodsOrderAddressCmd().getUserAddress(),
+                            cmd.getGoodsOrderAddressCmd().getUserPhone()
+                    );
         }
 
 
         //商品总价
-        BigDecimal goodsAmountTotal = goodsOrderDetailList.stream().map(GoodsOrderDetail::getSubtotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-        log.info("商品总价为：" + goodsAmountTotal);
+        BigDecimal goodsAmountTotal =goodsOrderDetailList.stream().map(GoodsOrderDetail::getSubtotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        log.info("商品总价为："+goodsAmountTotal);
 
         //运费获取最大值
-        BigDecimal logisticsFee = goodsOrderDetailList.stream().map(GoodsOrderDetail::getLogisticsFee).reduce(BigDecimal.ZERO, BigDecimal::max);
-        log.info("商品的最大运费为:" + logisticsFee);
+        BigDecimal logisticsFee =goodsOrderDetailList.stream().map(GoodsOrderDetail::getLogisticsFee).reduce(BigDecimal.ZERO, BigDecimal::max);
+        log.info("商品的最大运费为:"+logisticsFee);
 
         //订单号
-        String orderNo = IDPrefix.YM_ORDER_PREFIX + String.valueOf(System.currentTimeMillis());
+        String orderNo = IDPrefix.YM_ORDER_PREFIX+ String.valueOf(System.currentTimeMillis());
 
         List<GoodsOrderCoupon> goodsOrderCouponList = new ArrayList<GoodsOrderCoupon>();
         //是否有使用优惠券
-        if (StringUtils.isNotBlank(cmd.getCouponReceiveId())) {
+        if(StringUtils.isNotBlank(cmd.getCouponReceiveId())){
             /*List<GoodsOrderDetailCmd> cmdList = cmd.getGoodsOrderDetailCmdList();
             List<TargetCmd> targetCmds = cmdList.stream()
                     .map(goodsOrderDetailCmd -> {
@@ -353,9 +354,9 @@ public class GoodsOrderCmdService {
 
         //实际支付金额(产品金额+运费金额-优惠金额) 如果大于0则显示金额，小于0 则为0
         BigDecimal orderAmountTotal = goodsAmountTotal.add(logisticsFee).subtract(couponAmount);
-        if (orderAmountTotal.compareTo(new BigDecimal(0)) == 1) {
-            orderAmountTotal = goodsAmountTotal.add(logisticsFee).subtract(couponAmount);
-        } else {
+        if(orderAmountTotal.compareTo(new BigDecimal(0))==1){
+            orderAmountTotal  = goodsAmountTotal.add(logisticsFee).subtract(couponAmount);
+        }else{
             orderAmountTotal = new BigDecimal(0);
         }
 
@@ -368,14 +369,14 @@ public class GoodsOrderCmdService {
                 .memberName(userName)
                 //.memberName(URLDecoder.decode(userName, "utf-8"))
                 .supplierId(cmd.getSupplierId())
-                .shopId(shopId == null ? 10088L : shopId)
+                .shopId(shopId==null?10088L : shopId)
                 //待支付
                 .orderStatus(OrderStatusEnums.ORDER_STATUS_UNPAY)
                 .afterStatus(0)
                 .goodsCount(goodsOrderDetailList.size())
                 .goodsAmountTotal(goodsAmountTotal)
                 //运费金额
-                .logisticsFee(logisticsFee == null ? new BigDecimal(0) : logisticsFee)
+                .logisticsFee(logisticsFee==null? new BigDecimal(0):logisticsFee)
                 .couponAmount(couponAmount)
                 //实际付款金额
                 .orderAmountTotal(orderAmountTotal)
@@ -399,13 +400,13 @@ public class GoodsOrderCmdService {
                 .goodsOrderAddress(goodsOrderAddress)
                 .build();
         goodsOrder.preInsert();
-        if (StringUtils.isNotBlank(cmd.getRemarks())) {
-            //goodsOrder.setRemarks(cmd.getRemarks());
+        if(StringUtils.isNotBlank(cmd.getRemarks())){
+            goodsOrder.setRemarks(cmd.getRemarks());
         }
         goodsOrderRepo.save(goodsOrder);
 
         //添加支付超时
- /*       goodsOrderMsgMQ.sendCreateOrderOverTime(
+        /*goodsOrderMsgMQ.sendCreateOrderOverTime(
                 GoodsOrderOverTimeEvent.builder()
                         //设置订单号
                         .orderId(String.valueOf(goodsOrderId))
@@ -413,7 +414,7 @@ public class GoodsOrderCmdService {
         );*/
 
         //返回前端所需数据
-        GoodsOrderIdDto goodsOrderIdDto = new GoodsOrderIdDto();
+        GoodsOrderIdDto  goodsOrderIdDto = new GoodsOrderIdDto();
         goodsOrderIdDto.setId(goodsOrderId);
         goodsOrderIdDto.setOrderNo(orderNo);
 
@@ -423,19 +424,17 @@ public class GoodsOrderCmdService {
 
     /**
      * 取消订单
-     *
      * @param goodsOrderUpdateStatusCmd
      */
     public void cancelOrder(GoodsOrderUpdateCmd goodsOrderUpdateStatusCmd) {
         //构建取消对象
-        GoodsOrder goodsOrder = new GoodsOrder().cancelOrder(goodsOrderUpdateStatusCmd.getId(), "1");
+        GoodsOrder goodsOrder = new GoodsOrder().cancelOrder(goodsOrderUpdateStatusCmd.getId(),"1");
         goodsOrderRepo.update(goodsOrder);
     }
 
 
     /**
      * 更新订单状态
-     *
      * @param goodsOrderUpdateStatusCmd
      */
     public void updateStatus(GoodsOrderUpdateCmd goodsOrderUpdateStatusCmd) {
@@ -448,7 +447,6 @@ public class GoodsOrderCmdService {
 
     /**
      * 删除订单
-     *
      * @param goodsOrderUpdateStatusCmd
      */
     public void delete(GoodsOrderUpdateCmd goodsOrderUpdateStatusCmd) {
@@ -458,18 +456,16 @@ public class GoodsOrderCmdService {
 
     /**
      * 更新系统备注
-     *
      * @param goodsOrderUpdateStatusCmd
      */
     public void updateSystemRemarks(GoodsOrderUpdateCmd goodsOrderUpdateStatusCmd) {
-        GoodsOrder goodsOrder = new GoodsOrder().updateSysRemarks(goodsOrderUpdateStatusCmd.getId(), goodsOrderUpdateStatusCmd.getSystemRemarks());
+        GoodsOrder goodsOrder = new GoodsOrder().updateSysRemarks(goodsOrderUpdateStatusCmd.getId(),goodsOrderUpdateStatusCmd.getSystemRemarks());
         goodsOrderRepo.update(goodsOrder);
     }
 
 
     /**
      * 更新快递信息
-     *
      * @param goodsExpressCmd
      */
     @Transactional
@@ -499,10 +495,9 @@ public class GoodsOrderCmdService {
 
     /**
      * 完成订单
-     *
      * @param goodsFinshedCmd
      */
-    public void finished(GoodsFinshedCmd goodsFinshedCmd) {
+    public void finished(GoodsFinshedCmd goodsFinshedCmd){
         /*goodsOrderRepo.finshed(goodsFinshedCmd.getIds());
         BillingRuleDto billingRuleDto = distributionServiceResponse.getUpgrdeRule(goodsFinshedCmd.getShopId());
         log.info("获取自动延期的天数为：{}",billingRuleDto.getOrderSettleDays());
@@ -513,7 +508,6 @@ public class GoodsOrderCmdService {
 
     /**
      * 更新订单验证码信息
-     *
      * @param goodsVerificationCodeCmd
      */
     @Transactional
@@ -528,12 +522,12 @@ public class GoodsOrderCmdService {
         goodsOrderRepo.update(goodsOrder);
 
 
-        StringBuffer verifySn = new StringBuffer();
+        StringBuffer verifySn=new StringBuffer();
         //保存验证码列表
-        for (VerificationCodeCmd verificationCodeCmd : goodsVerificationCodeCmd.getVerificationCodeList()) {
-            String[] verficationcode = verificationCodeCmd.getVerifySn().split(",");
-            for (String vc : verficationcode) {
-                if (StringUtils.isNotBlank(vc)) {
+        for (VerificationCodeCmd verificationCodeCmd :goodsVerificationCodeCmd.getVerificationCodeList()){
+            String [] verficationcode = verificationCodeCmd.getVerifySn().split(",");
+            for(String vc : verficationcode){
+                if(StringUtils.isNotBlank(vc)){
                     OrderVerificationCode orderVerificationCode = OrderVerificationCode.builder()
                             .orderVerificationCodeId(goodsVerificationCodeRepo.nextId())
                             .goodsOrderId(new GoodsOrderId(goodsVerificationCodeCmd.getOrderId()))
@@ -553,18 +547,17 @@ public class GoodsOrderCmdService {
 
     /**
      * 微信支付
-     *
      * @param goodsOrderPayCmd
      * @return
      */
     /*public Map<String, String> wechat(GoodsOrderPayCmd goodsOrderPayCmd) throws OcBizException {
-        log.info("微信支付接收字符串为：" + JSON.toJSONString(goodsOrderPayCmd));
-        Map<String, String> returnMap = null;
+        log.info("微信支付接收字符串为："+ JSON.toJSONString(goodsOrderPayCmd));
+        Map<String, String> returnMap =null;
         //获取订单信息
         GoodsOrder goodsOrderSearch = goodsOrderRepo.findGoodsOrderById(new GoodsOrderId(Long.valueOf(goodsOrderPayCmd.getId())));
 
-        if (goodsOrderSearch == null) {
-            throw new OcBizException(OcReturnCode.OC202005.getMsg(), OcReturnCode.OC202005.getCode());
+        if(goodsOrderSearch == null){
+            throw new OcBizException(OcReturnCode.OC202005.getMsg(),OcReturnCode.OC202005.getCode());
         }
 
         //订单号
@@ -572,11 +565,11 @@ public class GoodsOrderCmdService {
         //支付方式
         WxPayApi.TradeType tradeType = WxPayApi.TradeType.APP;
 
-        log.info("当前支付的ip为：" + HttpUtils.getIpAddress());
+        log.info("当前支付的ip为："+ HttpUtils.getIpAddress());
         String productName = goodsOrderSearch.getGoodsOrderDetailList().get(0).getGoodsName();
-        log.info("产品长度为：" + productName.length());
-        if (productName.length() > 128) {
-            productName = productName.substring(0, 120);
+        log.info("产品长度为："+ productName.length());
+        if(productName.length()>128){
+            productName = productName.substring(0,120);
         }
 
         //支付订单
@@ -586,7 +579,7 @@ public class GoodsOrderCmdService {
                 .apiKey(apiKey)
                 //支付方式
                 .tradeType(tradeType)
-                .body("朗纱汇-" + productName)
+                .body("朗纱汇-"+productName)
                 .nonceStr(noncestr)
                 //支付单号
                 .orderCode(orderNo)
@@ -601,11 +594,13 @@ public class GoodsOrderCmdService {
             returnMap = WeiXinPay.pay(parm);
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (JDOMException e) {
+        }catch (JDOMException e) {
             e.printStackTrace();
         }
-        return returnMap;
+        return  returnMap;
     }*/
+
+
 
 
     /**
@@ -640,15 +635,14 @@ public class GoodsOrderCmdService {
 
     /**
      * 支付宝支付
-     *
      * @param goodsOrderPayCmd
      * @return
      */
-/*    public AlipayTradeAppPayResponse alipay(GoodsOrderPayCmd goodsOrderPayCmd) throws OcBizException {
+    /*public AlipayTradeAppPayResponse alipay(GoodsOrderPayCmd goodsOrderPayCmd) throws OcBizException {
         //查询原订单
         GoodsOrder goodsOrderSearch = goodsOrderRepo.findGoodsOrderById(new GoodsOrderId(Long.valueOf(goodsOrderPayCmd.getId())));
-        if (goodsOrderSearch == null) {
-            throw new OcBizException(OcReturnCode.OC202005.getMsg(), OcReturnCode.OC202005.getCode());
+        if(goodsOrderSearch == null){
+            throw new OcBizException(OcReturnCode.OC202005.getMsg(),OcReturnCode.OC202005.getCode());
         }
 
         //实例化客户端
@@ -670,29 +664,28 @@ public class GoodsOrderCmdService {
         try {
             //这里和普通的接口调用不同，使用的是sdkExecute
             response = alipayClient.sdkExecute(request);
-            if (response.isSuccess()) {
+            if(response.isSuccess()){
                 log.info("调用成功");
-            } else {
+            }else{
                 log.info("调用失败");
             }
             log.info("app支付返回参数：{}", JSON.toJSONString(response));
-            log.info("app支付返回参数body：{}", response.getBody());
+            log.info("app支付返回参数body：{}",response.getBody());
         } catch (AlipayApiException e) {
             e.printStackTrace();
-            log.error("支付错误：{}", e.getErrMsg());
-            throw new OcBizException(e.getErrMsg(), OcReturnCode.OC202005.getCode());
+            log.error("支付错误：{}",e.getErrMsg());
+            throw new OcBizException(e.getErrMsg(),OcReturnCode.OC202005.getCode());
         }
-        return response;
+        return  response;
     }*/
 
     /**
      * 支付宝退款
-     *
      * @param
      * @return
      */
- /*   public void alipayRefund() throws AlipayApiException {
-        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", APP_ID, APP_PRIVATE_KEY, "json", CHARSET, ALIPAY_PUBLIC_KEY, "RSA2");
+    /*public void alipayRefund() throws AlipayApiException {
+        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",APP_ID,APP_PRIVATE_KEY,"json",CHARSET,ALIPAY_PUBLIC_KEY,"RSA2");
         AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();
         refundModel.setTradeNo("11111");
         refundModel.setRefundAmount("0.01");
@@ -700,9 +693,9 @@ public class GoodsOrderCmdService {
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizModel(refundModel);
         AlipayTradeRefundResponse response = alipayClient.execute(request);
-        log.info("支付宝退款返回信息为：{}", response.getMsg());
-        log.info("支付宝退款返回信息体为：{}", response.getBody());
-        if (response.isSuccess()) {
+        log.info("支付宝退款返回信息为：{}",response.getMsg());
+        log.info("支付宝退款返回信息体为：{}",response.getBody());
+        if(response.isSuccess()){
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
@@ -712,16 +705,15 @@ public class GoodsOrderCmdService {
 
     /**
      * 支付宝异步调用方法
-     *
      * @param request
      * @return
      */
-  /*  public String ayncnotify(AyncNotify ayncNotify, HttpServletRequest request) throws AlipayApiException, UnsupportedEncodingException {
+    /*public String ayncnotify(AyncNotify ayncNotify, HttpServletRequest request) throws AlipayApiException, UnsupportedEncodingException {
         log.info("Alipay aync notify: {}", ayncNotify);
         //获取支付宝POST过来反馈信息
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String,String> params = new HashMap<String,String>();
         Map requestParams = request.getParameterMap();
-        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
             String name = (String) iter.next();
             String[] values = (String[]) requestParams.get(name);
             String valueStr = "";
@@ -733,13 +725,13 @@ public class GoodsOrderCmdService {
             //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
             params.put(name, valueStr);
         }
-        log.info("支付宝返回的参数集合为：{}", JSON.toJSONString(params));
+        log.info("支付宝返回的参数集合为：{}",JSON.toJSONString(params));
 
-        boolean flag = AlipaySignature.rsaCheckV1(params, ALIPAY_PUBLIC_KEY, CHARSET, "RSA2");
+        boolean flag = AlipaySignature.rsaCheckV1(params, ALIPAY_PUBLIC_KEY, CHARSET,"RSA2");
 
         // 验证签名
         if (flag) {
-            if (ayncNotify.getTrade_status().equals("TRADE_FINISHED")) {
+            if(ayncNotify.getTrade_status().equals("TRADE_FINISHED")){
                 //判断该笔订单是否在商户网站中已经做过处理
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
@@ -748,7 +740,7 @@ public class GoodsOrderCmdService {
                 //注意：
                 //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
 
-            } else if (ayncNotify.getTrade_status().equals("TRADE_SUCCESS")) {
+            } else if (ayncNotify.getTrade_status().equals("TRADE_SUCCESS")){
                 //判断该笔订单是否在商户网站中已经做过处理
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
@@ -759,7 +751,7 @@ public class GoodsOrderCmdService {
                 String orderNo = ayncNotify.getTrade_no();
                 //支付宝外部单号
                 String outTradeNo = ayncNotify.getOut_trade_no();
-                payAfterAction(orderNo, outTradeNo, 2, PayChannelEnums.ORDER_PAY_CHANNEL_ALIPAY);
+                payAfterAction(orderNo,outTradeNo,2,PayChannelEnums.ORDER_PAY_CHANNEL_ALIPAY);
             }
 
             //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
@@ -774,49 +766,50 @@ public class GoodsOrderCmdService {
 
     /**
      * 余额支付
-     *
      * @param goodsOrderPayCmd
      * @return
      * @throws OcBizException
      */
-    public void balance(GoodsOrderPayCmd goodsOrderPayCmd) {
+    public void balance(GoodsOrderPayCmd goodsOrderPayCmd){
 
         //查询原订单
         GoodsOrder goodsOrderSearch = goodsOrderRepo.findGoodsOrderById(new GoodsOrderId(Long.valueOf(goodsOrderPayCmd.getId())));
-        if (goodsOrderSearch == null) {
-            throw new OcBizException(OcReturnCode.OC202005.getMsg(), OcReturnCode.OC202005.getCode());
+        if(goodsOrderSearch == null){
+            throw new OcBizException(OcReturnCode.OC202005.getMsg(),OcReturnCode.OC202005.getCode());
         }
 
         //判断订单是否已经支付
-        if (!goodsOrderSearch.getOrderStatus().equals(OrderStatusEnums.ORDER_STATUS_UNPAY)) {
-            throw new OcBizException(OcReturnCode.OC202011.getMsg(), OcReturnCode.OC202011.getCode());
+        if(!goodsOrderSearch.getOrderStatus().equals(OrderStatusEnums.ORDER_STATUS_UNPAY)){
+            throw new OcBizException(OcReturnCode.OC202011.getMsg(),OcReturnCode.OC202011.getCode());
         }
 
-        Long userId = UserIdUtils.getUserId();
+         Long userId = UserIdUtils.getUserId();
         //Long userId = 190885212542992384L;
         Member member = memberRepo.queryByUserId(userId);
 
-        if (member == null) {
+        if(member == null){
             throw new UcBizException(UcReturnCode.UC200021.getMsg());
         }
         //判断是否设置支付密码
-        if (StringUtils.isBlank(member.getPayPassword())) {
-            throw new UcBizException(UcReturnCode.UC200041.getMsg(), UcReturnCode.UC200041.getCode());
+        if(StringUtils.isBlank(member.getPayPassword())){
+            throw new UcBizException(UcReturnCode.UC200041.getMsg(),UcReturnCode.UC200041.getCode());
         }
         //判断交易密码是否正确
-        Boolean flag = BPwdEncoderUtils.matches(goodsOrderPayCmd.getPassword(), member.getPayPassword());
-        if (!flag) {
-            throw new UcBizException(UcReturnCode.UC200040.getMsg(), UcReturnCode.UC200040.getCode());
+        Boolean flag = BPwdEncoderUtils.matches(goodsOrderPayCmd.getPassword(),member.getPayPassword());
+        if(!flag){
+            throw new UcBizException(UcReturnCode.UC200040.getMsg(),UcReturnCode.UC200040.getCode());
         }
-        BPwdEncoderUtils.matches(goodsOrderPayCmd.getPassword(), member.getPayPassword());
+        BPwdEncoderUtils.matches(goodsOrderPayCmd.getPassword(),member.getPayPassword());
 
-        payAfterAction(goodsOrderSearch.getOrderNo(), goodsOrderSearch.getOrderNo(), 1, PayChannelEnums.ORDER_PAY_CHANNEL_CASH);
+        payAfterAction(goodsOrderSearch.getOrderNo(),goodsOrderSearch.getOrderNo(),1,PayChannelEnums.ORDER_PAY_CHANNEL_CASH);
     }
+
+
+
 
 
     /**
      * 校验优惠券和库存信息
-     *
      * @param goodsOrderSearch
      * @param userId
      * @return
@@ -837,14 +830,14 @@ public class GoodsOrderCmdService {
 
         CouponLogsCreateCmd couponLogsCreateCmd = null;
         //检查是否使用优惠券
-        if (goodsOrderSearch.getGoodsOrderCouponList().size() > 0) {
+        if(goodsOrderSearch.getGoodsOrderCouponList().size()>0){
             couponLogsCreateCmd = CouponLogsCreateCmd.builder()
                     .orderId(goodsOrderSearch.getGoodsOrderId().getId())
                     .couponReceiveId(goodsOrderSearch.getGoodsOrderCouponList().get(0).getCouponReceiveId())
                     .memId(userId)
                     .targetCmds(targetCmds)
                     .build();
-        } else {
+        }else{
             couponLogsCreateCmd = CouponLogsCreateCmd.builder()
                     .orderId(goodsOrderSearch.getGoodsOrderId().getId())
                     .memId(userId)
@@ -857,7 +850,6 @@ public class GoodsOrderCmdService {
 
     /**
      * 微信支付完成回调函数
-     *
      * @param request
      * @param response
      * @throws Exception
@@ -901,59 +893,58 @@ public class GoodsOrderCmdService {
         GoodsOrder goodsOrder = GoodsOrder.builder().orderNo(orderNo).build();
         GoodsOrder goodsOrderSearch = goodsOrderRepo.findGoodsOrderByOrderNo(goodsOrder);
         String resXml = "";
-        log.info("当前订单状态为：{},是否相等{}", goodsOrderSearch.getOrderStatus().code, !OrderStatusEnums.ORDER_STATUS_UNPAY.code.equals(goodsOrderSearch.getOrderStatus().code));
-        if (!OrderStatusEnums.ORDER_STATUS_UNPAY.code.equals(goodsOrderSearch.getOrderStatus().code)) {
+        log.info("当前订单状态为：{},是否相等{}",goodsOrderSearch.getOrderStatus().code,!OrderStatusEnums.ORDER_STATUS_UNPAY.code.equals(goodsOrderSearch.getOrderStatus().code));
+        if(!OrderStatusEnums.ORDER_STATUS_UNPAY.code.equals(goodsOrderSearch.getOrderStatus().code)){
             resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
                     + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
             response.setContentType("text/xml; charset=utf-8");
             response.getWriter().write(resXml);
-        } else {
-            if (PaymentKit.verifyNotify(packageParams, apiKey)) {
-                //------------------------------
-                //处理业务开始
-                //------------------------------
-                if ("SUCCESS".equals(packageParams.get("result_code"))) {
+        }else{
+            if(PaymentKit.verifyNotify(packageParams,apiKey)) {
+                    //------------------------------
+                    //处理业务开始
+                    //------------------------------
+                    if("SUCCESS".equals(packageParams.get("result_code"))){
 
-                    //微信支付的订单流水号
-                    String transactionId = packageParams.get("transaction_id");
+                        //微信支付的订单流水号
+                        String transactionId = packageParams.get("transaction_id");
 
-                    payAfterAction(goodsOrderSearch.getOrderNo(), transactionId, 3, PayChannelEnums.ORDER_PAY_CHANNEL_WECHAT);
+                        payAfterAction(goodsOrderSearch.getOrderNo(),transactionId,3,PayChannelEnums.ORDER_PAY_CHANNEL_WECHAT);
 
-                    //通知微信.异步确认成功.必写.不然会一直通知后台.八次之后就认为交易失败了.
-                    resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
-                            + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
-                } else {
-                    log.info("支付失败,错误信息：" + packageParams.get("err_code"));
-                    resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
-                            + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+                        //通知微信.异步确认成功.必写.不然会一直通知后台.八次之后就认为交易失败了.
+                        resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
+                                + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                    } else {
+                        log.info("支付失败,错误信息：" + packageParams.get("err_code"));
+                        resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
+                                + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+                    }
+                    //------------------------------
+                    //处理业务完毕
+                    //------------------------------
+                    response.setContentType("text/xml; charset=utf-8");
+                    response.getWriter().write(resXml);
+                } else{
+                    log.info("通知签名验证失败");
                 }
-                //------------------------------
-                //处理业务完毕
-                //------------------------------
-                response.setContentType("text/xml; charset=utf-8");
-                response.getWriter().write(resXml);
-            } else {
-                log.info("通知签名验证失败");
             }
-        }
     }*/
 
 
     /**
      * 支付完成之后处理方法
-     *
-     * @param orderNo         订单号
-     * @param outTradeNo      第三方平台流水号
-     * @param type            支付渠道 1余额支出 2：支付宝支付 3：微信支付
+     * @param orderNo 订单号
+     * @param outTradeNo 第三方平台流水号
+     * @param type 支付渠道 1余额支出 2：支付宝支付 3：微信支付
      * @param payChannelEnums 支付渠道
      */
-    private void payAfterAction(String orderNo, String outTradeNo, Integer type, PayChannelEnums payChannelEnums) {
+    private void payAfterAction(String orderNo,String outTradeNo,Integer type,PayChannelEnums payChannelEnums) {
         GoodsOrder gos = GoodsOrder.builder()
                 .orderNo(orderNo)
                 .build();
         GoodsOrder goodsOrder = goodsOrderRepo.findGoodsOrderByOrderNo(gos);
         //如果订单为未支付则进行更新
-        if (goodsOrder.getPayStatus().equals(OrderPayStatusEnums.ORDER_PAY_STATUS_UNPAY)) {
+        if(goodsOrder.getPayStatus().equals(OrderPayStatusEnums.ORDER_PAY_STATUS_UNPAY)){
             goodsOrder.setPayChannel(payChannelEnums);
             goodsOrder.setOrderStatus(OrderStatusEnums.ORDER_STATUS_PAY);
             //设置支付状态为已支付
@@ -965,10 +956,10 @@ public class GoodsOrderCmdService {
         }
         //扣除库存
         //减库存并且在有优惠券的情况下使用优惠券
-        CouponLogsCreateCmd couponLogsCreateCmd = checkCoupon(goodsOrder, goodsOrder.getMemberId());
-        try {
+        CouponLogsCreateCmd couponLogsCreateCmd  = checkCoupon(goodsOrder, goodsOrder.getMemberId());
+        try{
             couponLogsComService.create(couponLogsCreateCmd);
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
 
@@ -979,17 +970,16 @@ public class GoodsOrderCmdService {
         cmd.setMemberId(gos.getMemberId());
         cmd.setType(type);
         cmd.setSn(goodsOrder.getOrderNo());
-        try {
+        try{
             financeAccountComService.consumption(cmd);
-        } catch (FcBizException e) {
-            log.error("资金账户扣除失败：{}", e.getMessage());
+        }catch (FcBizException e){
+            log.error("资金账户扣除失败：{}",e.getMessage());
         }
     }
 
 
     /**
      * 查询快递信息
-     *
      * @param goodsOrderIdCmd
      * @return
      * @throws Exception
@@ -998,8 +988,8 @@ public class GoodsOrderCmdService {
         GoodsOrderId goodsOrderId = new GoodsOrderId();
         goodsOrderId.setId(goodsOrderIdCmd.getId());
         GoodsOrderExpress goodsOrderExpress = goodsExpresssRepo.findGoodsExpressById(goodsOrderId);
-        if (goodsOrderExpress == null) {
-            throw new OcBizException(OcReturnCode.OC202003.getMsg(), OcReturnCode.OC202003.getCode());
+        if(goodsOrderExpress == null){
+            throw new OcBizException(OcReturnCode.OC202003.getMsg(),OcReturnCode.OC202003.getCode());
         }
         return null;
         /*return KdniaoTrackQueryAPI.getOrderTracesByJson(goodsOrderExpress.getExpressCode(),
@@ -1039,14 +1029,14 @@ public class GoodsOrderCmdService {
                         .skuId(detail.getGoodsSkuId())
                         .build();
                 SpuDto spuDto = spuQueryService.findByExemple(spuQry);
-                SpuOtherDto spuOtherDto = spuDto.getSpuOtherDto();
+                SpuOtherDto spuOtherDto =spuDto.getSpuOtherDto();
                 String shortName = spuDto.getSketch();
-                log.info("获取到的简短名称为：{}", shortName);
+                log.info("获取到的简短名称为：{}",shortName);
                 int num = detail.getNumber();
-                String date = DateUtil.dateToString(spuOtherDto.getActivityStartDate(), DateUtil.cn_yyyyMMdd) + "-" +
-                        DateUtil.dateToString(spuOtherDto.getActivityEndDate(), DateUtil.cn_yyyyMMdd);
+                String date = DateUtil.dateToString(spuOtherDto.getActivityStartDate(),DateUtil.cn_yyyyMMdd)+"-"+
+                        DateUtil.dateToString(spuOtherDto.getActivityEndDate(),DateUtil.cn_yyyyMMdd);
                 //发送短信
-                sendCodeMessage(goodsOrder, shortName, String.valueOf(num), date);
+                sendCodeMessage(goodsOrder,shortName,String.valueOf(num),date);
                 for (int i = 0; i < num; i++) {
                     verificationCodeCmd = new VerificationCodeCmd();
                     verificationCodeCmd.setOrderDetailId(detail.getGoodsOrderDetailId().getId());
@@ -1060,50 +1050,49 @@ public class GoodsOrderCmdService {
         }
         goodsVerificationCodeCmd.setVerificationCodeList(verificationCodeList);
         log.info(" -- 结束自主发码，返回参数：" + JSONObject.toJSONString(goodsVerificationCodeCmd));
-        goodsOrderRepo.updateOrderStatus(goodsOrder.getGoodsOrderId().getId(), OrderStatusEnums.ORDER_STATUS_SHIPPED.getCode());
+        goodsOrderRepo.updateOrderStatus(goodsOrder.getGoodsOrderId().getId(),OrderStatusEnums.ORDER_STATUS_SHIPPED.getCode());
         upVerificationCode(goodsVerificationCodeCmd);
         return goodsVerificationCodeCmd;
     }
 
     /**
-     * 发送核销二维码短信
-     *
+     *   发送核销二维码短信
      * @param goodsOrder
      * @param productName
      * @param num
      */
-    private void sendCodeMessage(GoodsOrder goodsOrder, String productName, String num, String date) {
+    private void sendCodeMessage(GoodsOrder goodsOrder,String productName,String num,String date) {
         String username = goodsOrder.getGoodsOrderAddress().getUserName();
         String mobile = goodsOrder.getGoodsOrderAddress().getUserPhone();
-        String url = checkDetailDomain + "/#/pages/order/detail?orderId=" + goodsOrder.getGoodsOrderId().getId();
+        String url  = checkDetailDomain+"/#/pages/order/detail?orderId="+goodsOrder.getGoodsOrderId().getId();
         String shortUrl = null;
         //自主发码产品发送短信
         try {
-            Map<String, String> reqeustParm = new HashMap<>();
-            reqeustParm.put("url", url);
-            JSONObject jsonObject = HttpsClientUtil.doGet(shortDomain, reqeustParm);
+            Map<String,String> reqeustParm = new HashMap<>();
+            reqeustParm.put("url",url);
+            JSONObject jsonObject = HttpsClientUtil.doGet(shortDomain,reqeustParm);
             Boolean success = jsonObject.getBoolean("success");
-            if (success) {
+            if(success){
                 shortUrl = jsonObject.getString("shortUrl");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         //短信信息
-        String content = GoodsOrderCreatedMsgEvent.sendCodeContentMsg.replaceFirst("\\{name\\}", username)
-                .replaceFirst("\\{productName\\}", productName)
-                .replaceFirst("\\{num\\}", num)
-                .replaceFirst("\\{url\\}", shortUrl)
-                .replaceFirst("\\{date\\}", date);
+        String content = GoodsOrderCreatedMsgEvent.sendCodeContentMsg.replaceFirst("\\{name\\}",username)
+                .replaceFirst("\\{productName\\}",productName)
+                .replaceFirst("\\{num\\}",num)
+                .replaceFirst("\\{url\\}",shortUrl)
+                .replaceFirst("\\{date\\}",date);
 
         //发送短息
        /* goodsOrderMsgMQ.sendCreateOrderMsg(
-                GoodsOrderCreatedMsgEvent.builder()
-                        .name(username)
-                        .mobile(mobile)
-                        .content(content)
-                        .build()
-        );*/
+                 GoodsOrderCreatedMsgEvent.builder()
+                         .name(username)
+                         .mobile(mobile)
+                         .content(content)
+                         .build()
+         );*/
     }
 
 
@@ -1159,13 +1148,13 @@ public class GoodsOrderCmdService {
             errMsg = "系统异常！";
             log.error("核销产品失败", e);
         } finally {
-            if (null == orderVerificationCode) {
+            if(null==orderVerificationCode){
                 orderVerificationCode = OrderVerificationCode.builder().verifySn(cmd.getVerifySn()).build();
             }
             orderVerificationCodeLogComService.recording(orderVerificationCode, goodsOrderDetail, errCode, errMsg);
         }
         if (StringUtils.isNotBlank(errMsg)) {
-            throw new OcBizException(errMsg, errCode);
+            throw new OcBizException(errMsg,errCode);
         }
         return orderVerificationCode;
     }
@@ -1173,16 +1162,15 @@ public class GoodsOrderCmdService {
 
     /**
      * 微信退款
-     *
      * @param wxRefundCmd
      */
-    public Map<String, String> refund(WxRefundCmd wxRefundCmd) throws OcBizException {
+    public  Map<String, String> refund(WxRefundCmd wxRefundCmd) throws OcBizException {
         GoodsOrder gob = GoodsOrder.builder()
                 .orderNo(wxRefundCmd.getOrderNo())
                 .build();
         GoodsOrder goodsOrder = goodsOrderRepo.findGoodsOrderByOrderNo(gob);
-        if (goodsOrder == null) {
-            throw new OcBizException(OcReturnCode.OC202005.getMsg(), OcReturnCode.OC202005.getCode());
+        if(goodsOrder == null){
+            throw new OcBizException(OcReturnCode.OC202005.getMsg(),OcReturnCode.OC202005.getCode());
         }
         return null;
     }
@@ -1200,7 +1188,6 @@ public class GoodsOrderCmdService {
 
     /**
      * 新增寄样信息
-     *
      * @param goodsOrderSimpleCmd
      * @throws OcBizException
      */
@@ -1208,8 +1195,8 @@ public class GoodsOrderCmdService {
     ) throws OcBizException {
         Long userId = UserIdUtils.getUserId();
         Long shopId = goodsOrderSimpleCmd.getShopId();
-        String sampleNo = String.valueOf("SO" + System.currentTimeMillis());
-        GoodsOrderSimple goodsOrderSimple = new GoodsOrderSimple().save(
+        String sampleNo = String.valueOf("SO"+System.currentTimeMillis());
+        GoodsOrderSimple goodsOrderSimple =new GoodsOrderSimple().save(
                 goodsOrderSimpleRepo.nextId(),
                 sampleNo,
                 userId,
@@ -1221,4 +1208,35 @@ public class GoodsOrderCmdService {
         );
         goodsOrderSimpleRepo.save(goodsOrderSimple);
     }
+
+    /**
+     * 更新快递信息
+     * @param goodsExpressCmd
+     */
+    public void upSampleOrderExpress(GoodsExpressCmd goodsExpressCmd) throws OcBizException {
+        GoodsOrderSimple goodsOrderSimple = goodsOrderSimpleRepo.findById(goodsExpressCmd.getOrderId());
+        //查询快递编码
+        ExpressCode expressCode = expresssCodeRepo.findExpressByName(goodsExpressCmd.getExpressCompanyName());
+
+        if(goodsOrderSimple!=null && expressCode!=null){
+            goodsOrderSimple.setExpressNo(goodsExpressCmd.getExpressNo());
+            goodsOrderSimple.setExpressCompany(goodsExpressCmd.getExpressCompanyName());
+            goodsOrderSimple.setExpressDate(new Date());
+            goodsOrderSimple.setExpressCode(expressCode.getExpressCode());
+            goodsOrderSimpleRepo.upSampleOrderExpress(goodsOrderSimple);
+        }
+    }
+
+    /**
+     * 删除寄样订单
+     * @param sampleNo
+     */
+    /*public void delSampleOrder(String sampleNo ){
+        GoodsOrderSimple goodsOrderSimple =goodsOrderSimpleRepo.findBySampleNo(sampleNo);
+        if(goodsOrderSimple == null){
+            throw new OcBizException(OcReturnCode.OC202012.getMsg(),OcReturnCode.OC202012.getCode());
+        }
+        goodsOrderSimpleRepo.delete(goodsOrderSimple.getGoodsOrderSimpleId().getId());
+    }*/
+
 }

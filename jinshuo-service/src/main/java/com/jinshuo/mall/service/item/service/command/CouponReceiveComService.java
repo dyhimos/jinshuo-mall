@@ -1,6 +1,7 @@
 package com.jinshuo.mall.service.item.service.command;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.exception.item.IcBizException;
 import com.jinshuo.core.exception.item.IcReturnCode;
 import com.jinshuo.core.utils.UserIdUtils;
@@ -101,7 +102,7 @@ public class CouponReceiveComService {
      */
     @Transactional
     public int autoCreate(CouponReceiveCreateCmd cmd) {
-        Coupon temp = Coupon.builder().forPeople(1).gainMethod(2).shopId(10088l).build();
+        Coupon temp = Coupon.builder().forPeople(1).gainMethod(2).shopId(DefaultShopId.SHOPID).build();
         List<Coupon> coupons = couponQueryService.getByExmple(temp);
         if (null == coupons || coupons.size() < 1) {
             return 0;

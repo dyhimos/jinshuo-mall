@@ -15,7 +15,7 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface GoodsExpressMapper {
 
-    @InsertProvider(type = DynamicSql.class, method = "createGoodsExpressSql")
+    @InsertProvider(type = OrderDynamicSql.class, method = "createGoodsExpressSql")
     void save(GoodsOrderExpress goodsOrderExpress);
 
 

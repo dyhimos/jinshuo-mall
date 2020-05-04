@@ -48,7 +48,7 @@ public interface GoodsOrderSimpleMapper {
                     @Result(property = "expressCode", column = "express_code")
             }
     )
-    @SelectProvider(type = DynamicSql.class, method = "queryGoodsSimpleOrderSql")
+    @SelectProvider(type = OrderDynamicSql.class, method = "queryGoodsSimpleOrderSql")
     List<GoodsOrderSimple> findList(GoodsSimpleQry goodsSimpleQry);
 
     @ResultMap("goodsOrderSampleList")

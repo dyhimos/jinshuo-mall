@@ -6,6 +6,9 @@ import com.jinshuo.mall.domain.user.model.role.Role;
 import com.jinshuo.mall.domain.user.model.scoreRecord.MemberScoreRecord;
 import com.jinshuo.mall.domain.user.model.userAccount.UserAccount;
 import com.jinshuo.mall.domain.user.model.userAccountPlatform.UserAccountPlatform;
+import com.jinshuo.mall.domain.user.model.wx.WxConfig;
+import com.jinshuo.mall.domain.user.model.wxMenu.WxMenu;
+import com.jinshuo.mall.domain.user.model.wxOpenAuth.WxOpenAuth;
 import com.jinshuo.mall.service.user.application.qry.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +22,7 @@ import org.apache.ibatis.jdbc.SQL;
  * @date 2019/7/17 15:06
  */
 @Slf4j
-public class DynamicSql {
+public class UserDynamicSql {
     public String createUserAccountSql(UserAccount userAccount) {
         log.info("进入创建账户信息sql");
         return new SQL()
@@ -501,6 +504,127 @@ public class DynamicSql {
                 ORDER_BY(" create_date DESC ");
             }
         }.toString();
+    }
+
+
+    /**
+     * 保存微信配置信息
+     *
+     * @param wxConfig
+     * @return
+     */
+    public String createWxConfigSql(WxConfig wxConfig) {
+        log.info("保存微信配置信息sql");
+        return new SQL()
+                .INSERT_INTO("wx_config")
+                .INTO_COLUMNS("id",
+                        "shop_id",
+                        "type",
+                        "app_id",
+                        "app_secret",
+                        "app_name",
+                        "pay_model",
+                        "mch_id",
+                        "sub_mch_id",
+                        "api_key",
+                        "cert_path",
+                        "create_date",
+                        "update_date",
+                        "remarks",
+                        "status",
+                        "version"
+                )
+                .INTO_VALUES("#{wxConfigId.id}",
+                        "#{shopId}",
+                        "#{appId}",
+                        "#{appSecret}",
+                        "#{appName}",
+                        "#{payModel}",
+                        "#{mchId}",
+                        "#{subMchId}",
+                        "#{apiKey}",
+                        "#{certPath}",
+                        "#{createDate}",
+                        "#{updateDate}",
+                        "#{remarks}",
+                        "#{status.code}",
+                        "#{version}"
+                )
+                .toString();
+    }
+
+
+    /**
+     * 保存微信菜单信息
+     *
+     * @param wxMenu
+     * @return
+     */
+    public String createWxMenuSql(WxMenu wxMenu) {
+        log.info("保存微信菜单信息sql");
+        return new SQL()
+                .INSERT_INTO("wx_template_message")
+                .INTO_COLUMNS("id",
+                        "shop_id",
+                        "parent_id",
+                        "name",
+                        "url",
+                        "type",
+                        "level",
+                        "sort",
+                        "create_date",
+                        "update_date",
+                        "remarks",
+                        "status",
+                        "version"
+                )
+                .INTO_VALUES("#{wxMenuId.id}",
+                        "#{shopId}",
+                        "#{parentId}",
+                        "#{name}",
+                        "#{url}",
+                        "#{type}",
+                        "#{level}",
+                        "#{sort}",
+                        "#{createDate}",
+                        "#{updateDate}",
+                        "#{remarks}",
+                        "#{status.code}",
+                        "#{version}"
+                ).toString();
+    }
+
+
+    /**
+     * 保存微信授权信息
+     *
+     * @param wxOpenAuth
+     * @return
+     */
+    public String createWxOpenAuthSql(WxOpenAuth wxOpenAuth) {
+        log.info("保存微信认证信息sql");
+        return new SQL()
+                .INSERT_INTO("wx_open_auth")
+                .INTO_COLUMNS("id",
+                        "shop_id",
+                        "appid",
+                        "authorizer_refresh_token",
+                        "create_date",
+                        "update_date",
+                        "remarks",
+                        "status",
+                        "version"
+                )
+                .INTO_VALUES("#{wxOpenAuthId.id}",
+                        "#{shopId}",
+                        "#{appid}",
+                        "#{authorizerRefreshToken}",
+                        "#{createDate}",
+                        "#{updateDate}",
+                        "#{remarks}",
+                        "#{status.code}",
+                        "#{version}"
+                ).toString();
     }
 
 

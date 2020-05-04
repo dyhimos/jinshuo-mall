@@ -1,5 +1,6 @@
 package com.jinshuo.mall.service.user.service.command;
 
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.idgen.CommonSelfIdGenerator;
 import com.jinshuo.mall.domain.user.model.supplier.Supplier;
 import com.jinshuo.mall.domain.user.model.supplier.SupplierId;
@@ -26,7 +27,7 @@ public class SupplierComService {
      */
     public int save(SupplierCmd cmd) {
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088L);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         if (null == cmd.getLoginFlag()) {
             cmd.setLoginFlag(1);

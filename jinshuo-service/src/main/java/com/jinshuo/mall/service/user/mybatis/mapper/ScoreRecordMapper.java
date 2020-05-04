@@ -43,7 +43,7 @@ public interface ScoreRecordMapper {
                     @Result(property = "sourceMemo", column = "source_memo")
             }
     )
-    @SelectProvider(type = DynamicSql.class, method = "queryScoreRecordSql")
+    @SelectProvider(type = UserDynamicSql.class, method = "queryScoreRecordSql")
     List<MemberScoreRecord> findMemberScoreRecordList(MemberScoreRecord memberScoreRecord);
 
 

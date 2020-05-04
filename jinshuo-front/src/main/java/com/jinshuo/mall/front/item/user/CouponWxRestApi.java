@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @Api(description = "优惠券接口")
-@RequestMapping("/v1/wx/coupon")
+@RequestMapping("itemApi/v1/wx/coupon")
 public class CouponWxRestApi {
 
     @Autowired

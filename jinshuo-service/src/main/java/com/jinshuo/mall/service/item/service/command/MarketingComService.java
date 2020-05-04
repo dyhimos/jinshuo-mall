@@ -1,5 +1,6 @@
 package com.jinshuo.mall.service.item.service.command;
 
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.idgen.CommonSelfIdGenerator;
 import com.jinshuo.mall.domain.item.marketing.Marketing;
 import com.jinshuo.mall.domain.item.marketing.MarketingId;
@@ -30,7 +31,7 @@ public class MarketingComService {
     @Transactional
     public void create(MarketingCmd cmd) {
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088l);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         if (null != cmd.getId()) {
             update(cmd);

@@ -40,6 +40,6 @@ public interface GoodsOrderCouponMapper {
      *
      * @param goodsOrderCoupon
      */
-    @InsertProvider(type = DynamicSql.class, method = "createGoodsOrderCouponSql")
+    @InsertProvider(type = OrderDynamicSql.class, method = "createGoodsOrderCouponSql")
     void save(GoodsOrderCoupon goodsOrderCoupon);
 }

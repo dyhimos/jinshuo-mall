@@ -2,6 +2,7 @@ package com.jinshuo.mall.service.item.service.query;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.item.service.ServiceSupport;
 import com.jinshuo.mall.service.item.application.assermbler.ServiceAssembler;
 import com.jinshuo.mall.service.item.application.dto.ServiceSupportDto;
@@ -32,7 +33,7 @@ public class ServiceSupportQueryService {
      */
     public PageInfo getSercivePage(TopicQry qry) {
         ServiceSupport serviceSupport = new ServiceSupport();
-        serviceSupport.setShopId(10088l);
+        serviceSupport.setShopId(DefaultShopId.SHOPID);
         PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
         List<ServiceSupport> list = serviceSupportRepo.findAll(serviceSupport);
         PageInfo pageInfo = new PageInfo(list);
@@ -49,7 +50,7 @@ public class ServiceSupportQueryService {
      */
     public List<ServiceSupportDto> getServices() {
         ServiceSupport serviceSupport = new ServiceSupport();
-        serviceSupport.setShopId(10088l);
+        serviceSupport.setShopId(DefaultShopId.SHOPID);
         List<ServiceSupport> list = serviceSupportRepo.findAll(serviceSupport);
         List<ServiceSupportDto> dtos = list.stream()
                 .map(serviceSupport1 -> ServiceAssembler.assembleDto(serviceSupport1)).collect(Collectors.toList());

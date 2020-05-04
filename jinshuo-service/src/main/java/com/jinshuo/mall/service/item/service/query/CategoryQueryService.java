@@ -1,6 +1,7 @@
 package com.jinshuo.mall.service.item.service.query;
 
 import com.github.pagehelper.PageInfo;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.item.category.model.Category;
 import com.jinshuo.mall.domain.item.category.model.CategoryId;
 import com.jinshuo.mall.domain.item.category.model.CategoryLevel;
@@ -51,7 +52,7 @@ public class CategoryQueryService {
      */
     public List<CategoryDto> getCategorys(CategoryQry qry) {
         if (null == qry.getShopId()) {
-            qry.setShopId(10088l);
+            qry.setShopId(DefaultShopId.SHOPID);
         }
         //查詢一級
         List<Category> list = repo.findByExample(Category.builder().categoryLevel(new CategoryLevel(1)).shopId(qry.getShopId()).build());
@@ -92,7 +93,7 @@ public class CategoryQueryService {
     public List<CategoryDto> getFirstPageCategorys(CategoryQry qry) {
         log.info(" -- 查询首页展示类目");
         if (null == qry.getShopId()) {
-            qry.setShopId(10088l);
+            qry.setShopId(DefaultShopId.SHOPID);
         }
         Category category = Category.builder().categoryLevel(new CategoryLevel(1)).isShow(0)
                 .shopId(qry.getShopId()).build();

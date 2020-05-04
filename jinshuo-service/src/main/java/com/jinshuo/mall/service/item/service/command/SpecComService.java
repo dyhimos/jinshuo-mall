@@ -1,5 +1,6 @@
 package com.jinshuo.mall.service.item.service.command;
 
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.idgen.CommonSelfIdGenerator;
 import com.jinshuo.mall.domain.item.category.model.CategoryId;
 import com.jinshuo.mall.domain.item.spec.Spec;
@@ -36,7 +37,7 @@ public class SpecComService {
     @Transactional
     public void create(SpecCreateCmd cmd) {
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088l);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         SpecId specId = new SpecId(CommonSelfIdGenerator.generateId());
         Spec spec = Spec.builder()
@@ -78,7 +79,7 @@ public class SpecComService {
     @Transactional
     public Spec createSpec(SpecCreateCmd cmd) {
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088l);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         Spec spec = Spec.builder()
                 .shopId(cmd.getShopId())

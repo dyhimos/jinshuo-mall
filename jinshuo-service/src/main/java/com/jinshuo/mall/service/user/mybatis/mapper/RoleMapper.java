@@ -50,7 +50,7 @@ public interface RoleMapper {
                     @Result(property = "updateDate", column = "update_date")
             }
     )
-    @SelectProvider(type = DynamicSql.class, method = "queryRole")
+    @SelectProvider(type = UserDynamicSql.class, method = "queryRole")
     List<Role> queryRole(Role role);
 
     @ResultMap(value = "roleResult")

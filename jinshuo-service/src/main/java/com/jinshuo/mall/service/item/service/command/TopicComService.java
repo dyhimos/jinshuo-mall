@@ -1,5 +1,6 @@
 package com.jinshuo.mall.service.item.service.command;
 
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.exception.item.IcBizException;
 import com.jinshuo.core.exception.item.IcReturnCode;
 import com.jinshuo.mall.domain.item.topic.Topic;
@@ -28,7 +29,7 @@ public class TopicComService {
     public void create(TopicCmd cmd) {
         cmd.check();
         if(null==cmd.getShopId()){
-            cmd.setShopId(10088l);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         Topic temp = null;
         if (StringUtils.isNotBlank(cmd.getCode())) {

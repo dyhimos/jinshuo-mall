@@ -28,4 +28,19 @@ public class WxConfigDto {
     @ApiModelProperty(value = "type 0:商家 1：渠道商")
     private Integer type;
 
+    @ApiModelProperty(value = "shopName")
+    private String shopName;
+
+    @ApiModelProperty(value = "logo")
+    private String logo;
+
+    @ApiModelProperty(value = "linkMan")
+    private String linkMan;
+
+    @ApiModelProperty(value = "phone")
+    private String phone;
+
+    @ApiModelProperty(value = "sketch")
+    private String sketch;
+
 }

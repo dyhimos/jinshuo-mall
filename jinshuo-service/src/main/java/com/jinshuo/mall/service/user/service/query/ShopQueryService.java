@@ -40,6 +40,9 @@ public class ShopQueryService {
         return dtos;
     }
 
+    public Shop getById(Long id) {
+        return shopRepo.findById(id);
+    }
 
     /**
      * 查询店铺信息

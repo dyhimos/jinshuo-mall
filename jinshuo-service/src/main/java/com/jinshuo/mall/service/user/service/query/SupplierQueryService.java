@@ -2,6 +2,7 @@ package com.jinshuo.mall.service.user.service.query;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.user.model.supplier.Supplier;
 import com.jinshuo.mall.service.user.application.assermbler.SupplierAssembler;
 import com.jinshuo.mall.service.user.application.dto.SupplierDto;
@@ -32,7 +33,7 @@ public class SupplierQueryService {
      */
     public PageInfo getByPage(SupplierQry qry) {
         if (null == qry.getShopId()) {
-            qry.setShopId(10088L);
+            qry.setShopId(DefaultShopId.SHOPID);
         }
         PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
         Supplier temp = Supplier.builder().shopId(qry.getShopId()).build();
@@ -50,7 +51,7 @@ public class SupplierQueryService {
      * @return Address
      */
     public List<SupplierDto> getList() {
-        Supplier temp = Supplier.builder().shopId(10088L).build();
+        Supplier temp = Supplier.builder().shopId(DefaultShopId.SHOPID).build();
         List<Supplier> list = supplierRepo.findAll(temp);
         List<SupplierDto> dtos = list.stream().map(supplier -> SupplierAssembler.assembleSupplierDto(supplier)).collect(Collectors.toList());
         return dtos;

@@ -2,6 +2,7 @@ package com.jinshuo.mall.service.item.service.query;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.item.marketing.Marketing;
 import com.jinshuo.mall.service.item.application.assermbler.MarketingAssembler;
 import com.jinshuo.mall.service.item.application.dto.MarketingDto;
@@ -39,10 +40,9 @@ public class MarketingQueryService {
         return dto;
     }
 
-
     public PageInfo getPageInfo(MarketingQry qry) {
         if (null == qry.getShopId()) {
-            qry.setShopId(10088l);
+            qry.setShopId(DefaultShopId.SHOPID);
         }
         PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
         Marketing temp = new Marketing();

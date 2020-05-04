@@ -24,7 +24,7 @@ import java.util.List;
 @Mapper
 public interface GoodsOrderMapper {
 
-    @InsertProvider(type = DynamicSql.class, method = "createGoodsOrderSql")
+    @InsertProvider(type = OrderDynamicSql.class, method = "createGoodsOrderSql")
     void save(GoodsOrder goodsOrder);
 
 
@@ -65,10 +65,10 @@ public interface GoodsOrderMapper {
 
             }
     )
-    @SelectProvider(type = DynamicSql.class, method = "queryGoodsOrderSql")
+    @SelectProvider(type = OrderDynamicSql.class, method = "queryGoodsOrderSql")
     List<GoodsOrder> queryGoodsOrder(GoodsOrderQry query);
 
-    @UpdateProvider(type = DynamicSql.class, method = "updateGoodsOrderSql")
+    @UpdateProvider(type = OrderDynamicSql.class, method = "updateGoodsOrderSql")
     void update(GoodsOrder goodsOrder);
 
     /**
@@ -110,7 +110,7 @@ public interface GoodsOrderMapper {
                     @Result(property = "memberName", column = "member_name"),
             }
     )
-    @SelectProvider(type = DynamicSql.class, method = "countOrder")
+    @SelectProvider(type = OrderDynamicSql.class, method = "countOrder")
     List<GoodsOrder> countOrder(ManagerOrderCountQry qry);
 
 

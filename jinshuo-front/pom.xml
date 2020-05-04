@@ -39,8 +39,13 @@
 			<artifactId>jinshuo-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+        <dependency>
+            <groupId>com.jinshuo.ws.wx</groupId>
+            <artifactId>jinshuo-ws-wx</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 
 </project>

@@ -1,6 +1,7 @@
 package com.jinshuo.mall.service.item.service.command;
 
 import com.google.common.base.Joiner;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.idgen.CommonSelfIdGenerator;
 import com.jinshuo.mall.domain.item.parameter.Parameter;
 import com.jinshuo.mall.domain.item.parameter.ParameterId;
@@ -30,9 +31,9 @@ public class ParameterComService {
      * @param cmd
      */
     public void create(ParameterCmd cmd) {
-        log.info(" -- 新增参数,{}",cmd);
+        log.info(" -- 新增参数,{}", cmd);
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088L);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         if (null != cmd.getId()) {
             update(cmd);
@@ -59,10 +60,10 @@ public class ParameterComService {
      * @param cmd
      */
     public void update(ParameterCmd cmd) {
-        log.info(" -- 修改参数,{}",cmd);
+        log.info(" -- 修改参数,{}", cmd);
         Parameter parameter = parameterRepo.getById(cmd.getId());
         if (null != parameter) {
-            parameter.update(cmd.getName(), cmd.getType(), cmd.getSort(),cmd.getSingleFlag());
+            parameter.update(cmd.getName(), cmd.getType(), cmd.getSort(), cmd.getSingleFlag());
             parameterRepo.update(parameter);
             //parameterValueComService.createList(cmd.getParams(), parameter);
         }

@@ -1,5 +1,6 @@
 package com.jinshuo.mall.service.item.service.command;
 
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.item.service.ServiceSupport;
 import com.jinshuo.mall.domain.item.service.ServiceSupportId;
 import com.jinshuo.mall.service.item.application.cmd.ServiceSupportCmd;
@@ -30,8 +31,7 @@ public class ServiceSupportComService {
      * @param cmd
      */
     public int create(ServiceSupportCmd cmd) {
-        cmd.setShopId(10088l);
-
+        cmd.setShopId(DefaultShopId.SHOPID);
         if (null != cmd.getId()) {
             update(cmd);
         } else {

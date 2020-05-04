@@ -39,7 +39,7 @@ public interface GoodsOrderAddressMapper {
      *
      * @param goodsOrderAddress
      */
-    @InsertProvider(type = DynamicSql.class, method = "createGoodsOrderAddressSql")
+    @InsertProvider(type = OrderDynamicSql.class, method = "createGoodsOrderAddressSql")
     void save(GoodsOrderAddress goodsOrderAddress);
 
 }

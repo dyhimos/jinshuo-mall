@@ -1,6 +1,7 @@
 package com.jinshuo.mall.admin.config.security.auth;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jinshuo.core.utils.RandomUtil;
 import com.jinshuo.mall.admin.config.security.userService.BaseUserService;
 import com.jinshuo.mall.admin.config.security.userService.UserLoginService;
 import io.jsonwebtoken.Jwts;
@@ -44,21 +45,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        String indexStr = RandomUtil.getNumRandom(10);
         String token = getJwtFromRequest(request);
-        System.out.println("--**--" + request.getParameterMap().toString());
-        System.out.println("--**--" + JSONObject.toJSONString(request.getParameterMap()));
-
+        request.getContextPath();
+        System.out.println("--**--" + indexStr + request.getRequestURL() + " : " + request.getParameterMap().toString());
+        System.out.println("--**--" + indexStr + request.getRequestURL() + " : " + JSONObject.toJSONString(request.getParameterMap()));
         if (token != null && jwtTokenProvider.validateToken(token)) {
             String username = getUsernameFromJwt(token, AuthParameters.jwtTokenSecret);
-
             UserDetails userDetails = userLoginService.loadUserByUsername(username);
-
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         } else {
-            logger.error(request.getParameter("username") + " :Token is null");
+            logger.error("--**--" + indexStr + " : " + request.getRequestURL() + " -- " + request.getParameter("username") + " :Token is null");
         }
         try {
             super.doFilter(request, response, filterChain);

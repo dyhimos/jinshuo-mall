@@ -1,6 +1,7 @@
 package com.jinshuo.mall.service.item.service.command;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.exception.item.IcBizException;
 import com.jinshuo.core.exception.item.IcReturnCode;
 import com.jinshuo.core.idgen.CommonSelfIdGenerator;
@@ -67,7 +68,7 @@ public class SpuComService {
     public Spu save(SpuUpdateCmd cmd) {
         log.info(" -- 新增商品，输入参数：" + JSONObject.toJSONString(cmd));
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088L);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         SpuId spuId = new SpuId(CommonSelfIdGenerator.generateId());
         if (0 == cmd.getSingleSku() || null == cmd.getSkus() || cmd.getSkus().size() < 1 || StringUtils.isBlank(cmd.getSkus().get(0).getName())) {
@@ -136,7 +137,7 @@ public class SpuComService {
             throw new IcBizException(IcReturnCode.IC201009.getMsg());
         }
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088L);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         if (0 == cmd.getSingleSku() || null == cmd.getSkus() || cmd.getSkus().size() < 1 || StringUtils.isBlank(cmd.getSkus().get(0).getName())) {
             cmd.setSingleSku(0);

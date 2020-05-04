@@ -51,7 +51,7 @@ public interface GoodsOrderDetailMapper {
                     @Result(property = "subtotal", column = "subtotal")
             }
     )
-    @SelectProvider(type = DynamicSql.class, method = "queryGoodsOrderDetailSql")
+    @SelectProvider(type = OrderDynamicSql.class, method = "queryGoodsOrderDetailSql")
     List<GoodsOrderDetail> findByOrderId(GoodsOrderId goodsOrderId);
 
 
@@ -70,7 +70,7 @@ public interface GoodsOrderDetailMapper {
      *
      * @param goodsOrderDetail
      */
-    @InsertProvider(type = DynamicSql.class, method = "createGoodsOrderDetailSql")
+    @InsertProvider(type = OrderDynamicSql.class, method = "createGoodsOrderDetailSql")
     void save(GoodsOrderDetail goodsOrderDetail);
 
     /**
@@ -104,7 +104,7 @@ public interface GoodsOrderDetailMapper {
                     @Result(property = "costPrice", column = "costPrice")
             }
     )
-    @SelectProvider(type = DynamicSql.class, method = "queryGoodsOrderDetailBySupplierIdSql")
+    @SelectProvider(type = OrderDynamicSql.class, method = "queryGoodsOrderDetailBySupplierIdSql")
     List<OrderDetailQryDto> queryBySupplierId(OrderCountQry qry);
 
 

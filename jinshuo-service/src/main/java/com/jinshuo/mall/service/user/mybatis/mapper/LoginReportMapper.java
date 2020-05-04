@@ -53,7 +53,7 @@ public interface LoginReportMapper {
     LoginReport queryTodayReport(@Param("shopId") Long shopId);
 
     @ResultMap("loginReportResult")
-    @SelectProvider(type = DynamicSql.class, method = "countLogin")
+    @SelectProvider(type = UserDynamicSql.class, method = "countLogin")
     List<LoginReport> countLogin(ManagerCountQry qry);
 
 }

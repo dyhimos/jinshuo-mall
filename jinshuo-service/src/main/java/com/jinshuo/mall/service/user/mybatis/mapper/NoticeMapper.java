@@ -65,7 +65,7 @@ public interface NoticeMapper {
     List<Notice> queryNotice(Notice notice);
 
     @ResultMap("noticeResult")
-    @SelectProvider(type = DynamicSql.class, method = "queryMyNotice")
+    @SelectProvider(type = UserDynamicSql.class, method = "queryMyNotice")
     List<Notice> queryMyNotice(Notice notice);
 
 }

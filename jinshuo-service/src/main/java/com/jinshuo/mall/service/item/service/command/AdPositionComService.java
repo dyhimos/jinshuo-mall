@@ -1,5 +1,6 @@
 package com.jinshuo.mall.service.item.service.command;
 
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.exception.item.IcBizException;
 import com.jinshuo.core.exception.item.IcReturnCode;
 import com.jinshuo.mall.domain.item.ad.AdPosition;
@@ -25,7 +26,7 @@ public class AdPositionComService {
      */
     public void create(AdPositionCmd cmd) {
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088l);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         AdPosition temp = adPositionRepo.queryByCode(cmd.getCode(), cmd.getShopId());
         if (null == cmd.getId() && null != temp) {

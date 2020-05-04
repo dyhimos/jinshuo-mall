@@ -52,7 +52,7 @@ public interface StatisticsMapper {
 
 
     @ResultMap("statisticsResult")
-    @SelectProvider(type = DynamicSql.class, method = "countStatistics")
+    @SelectProvider(type = UserDynamicSql.class, method = "countStatistics")
     List<Statistics> countStatistics(VisitorCountQry qry);
 
     @Results(

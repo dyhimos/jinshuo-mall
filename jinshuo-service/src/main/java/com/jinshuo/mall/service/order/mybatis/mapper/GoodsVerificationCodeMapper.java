@@ -16,7 +16,7 @@ import java.util.List;
 @Mapper
 public interface GoodsVerificationCodeMapper {
 
-    @InsertProvider(type = DynamicSql.class, method = "createVerificationCodeSql")
+    @InsertProvider(type = OrderDynamicSql.class, method = "createVerificationCodeSql")
     void save(OrderVerificationCode orderVerificationCode);
 
 

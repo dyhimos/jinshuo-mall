@@ -3,6 +3,7 @@ package com.jinshuo.mall.service.item.service.query;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.item.coupon.Coupon;
 import com.jinshuo.mall.domain.item.couponitem.CouponItem;
 import com.jinshuo.mall.domain.item.couponreceive.CouponReceive;
@@ -59,7 +60,7 @@ public class CouponQueryService {
     public PageInfo getDtoByPage(CouponQry qry) {
         log.info(" -- 后端查询优惠券列表，输入参数" + JSONObject.toJSONString(qry));
         if (null == qry.getShopId()) {
-            qry.setShopId(10088l);
+            qry.setShopId(DefaultShopId.SHOPID);
         }
         PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
         Coupon temp = Coupon.builder().shopId(qry.getShopId()).build();

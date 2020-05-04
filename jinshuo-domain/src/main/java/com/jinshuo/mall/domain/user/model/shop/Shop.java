@@ -22,38 +22,12 @@ public class Shop extends IdentifiedEntity {
     private Long merchantId;
     private Integer type;
     private Integer shopStatus; //店铺状态 0正常  1停用
-
-    /**
-     * 店铺头像
-     */
     private String logo;
-
-    /**
-     * 简介
-     */
-    private String introduce;
-
-    /**
-     * 客服电话
-     */
-    private String customerTel;
-
-    /**
-     * 营业时间：1全天 2：自定义
-     */
-    private Integer workType;
-
-    /**
-     * 开始时间
-     */
-    private Date starTime;
-
-    /**
-     * 结束时间
-     */
+    private String linkMan;
+    private String phone;
+    private String sketch;
+    private Date startTime;
     private Date endTime;
-
-
 
     public Shop insert() {
         this.shopId = new ShopId(CommonSelfIdGenerator.generateId());

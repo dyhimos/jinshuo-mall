@@ -19,10 +19,10 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
-    @InsertProvider(type = DynamicSql.class, method = "createMemberSql")
+    @InsertProvider(type = UserDynamicSql.class, method = "createMemberSql")
     void save(Member member);
 
-    @UpdateProvider(type = DynamicSql.class, method = "updateMemberInfoSql")
+    @UpdateProvider(type = UserDynamicSql.class, method = "updateMemberInfoSql")
     void update(Member member);
 
 
@@ -41,7 +41,7 @@ public interface MemberMapper {
 
 
     @ResultMap(value = "memberResult")
-    @SelectProvider(type = DynamicSql.class, method = "queryMemberListSql")
+    @SelectProvider(type = UserDynamicSql.class, method = "queryMemberListSql")
     List<Member> queryMemberList(MemberQry query);
 
     @Results(
@@ -96,7 +96,7 @@ public interface MemberMapper {
      *
      * @param member
      */
-    @UpdateProvider(type = DynamicSql.class, method = "updateMemberSql")
+    @UpdateProvider(type = UserDynamicSql.class, method = "updateMemberSql")
     void updateById(Member member);
 
 
@@ -146,7 +146,7 @@ public interface MemberMapper {
     Member queryMyUpperSaleman(@Param("userId") Long userId);
 
     @ResultMap(value = "memberResult")
-    @SelectProvider(type = DynamicSql.class, method = "queryMySubordinateInfo")
+    @SelectProvider(type = UserDynamicSql.class, method = "queryMySubordinateInfo")
     List<Member> queryMySubordinateInfo(DisSalemanQry query);
 
 
@@ -179,7 +179,7 @@ public interface MemberMapper {
             + "</script>"})
     void unSubscribeFans(@Param("notSubscribeList") List<String> notSubscribeList, @Param("shopId") Long shopId);
 
-    @UpdateProvider(type = DynamicSql.class, method = "comInfo")
+    @UpdateProvider(type = UserDynamicSql.class, method = "comInfo")
     int comInfo(Member member);
 
 

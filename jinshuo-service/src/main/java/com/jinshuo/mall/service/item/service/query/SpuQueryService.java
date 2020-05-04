@@ -3,6 +3,7 @@ package com.jinshuo.mall.service.item.service.query;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.exception.item.IcBizException;
 import com.jinshuo.core.exception.item.IcReturnCode;
 import com.jinshuo.core.utils.UserIdUtils;
@@ -434,7 +435,7 @@ public class SpuQueryService {
      */
     public PageInfo queryDisProduct(SpuQry spuQry) {
         log.info(" -- 分页查询分销产品查询接口");
-        spuQry.setShopId(10088l);
+        spuQry.setShopId(DefaultShopId.SHOPID);
         changeShopId(spuQry);
         PageHelper.startPage(spuQry.getPageNum(), spuQry.getPageSize());
         List<FrontSpuDto> spus = repo.findDis(spuQry);

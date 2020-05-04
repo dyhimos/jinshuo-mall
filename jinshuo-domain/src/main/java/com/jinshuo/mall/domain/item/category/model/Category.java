@@ -1,5 +1,6 @@
 package com.jinshuo.mall.domain.item.category.model;
 
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.model.IdentifiedEntity;
 import com.jinshuo.core.utils.UrlUtil;
 import lombok.*;
@@ -77,7 +78,7 @@ public class Category extends IdentifiedEntity {
         this.needAudit = needAudit;
         this.isShow = isShow;
         if (null==shopId) {
-            shopId = 10088l;
+            shopId = DefaultShopId.SHOPID;
         }
         this.shopId = shopId;
         if (null == pCategory) {

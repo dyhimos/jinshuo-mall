@@ -23,7 +23,7 @@ import org.apache.ibatis.jdbc.SQL;
  * @date 2019/7/17 15:06
  */
 @Slf4j
-public class DynamicSql {
+public class OrderDynamicSql {
     /**
      * 保存sql
      *

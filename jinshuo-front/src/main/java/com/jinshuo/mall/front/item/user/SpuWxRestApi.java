@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @Api(description = "产品查询接口")
-@RequestMapping("/v1/wx/spu")
+@RequestMapping("itemApi/v1/wx/spu")
 public class SpuWxRestApi {
 
     @Autowired
@@ -53,7 +53,6 @@ public class SpuWxRestApi {
         return WrapperResponse.success(spuQueryService.queryPageInfo(qry));
     }
 
-
     @PostMapping(value = "/getRecommendProduct", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(httpMethod = "POST", value = "获取推荐产品列表")
     public WrapperResponse getRecommendProduct(SpuQry qry) {
@@ -71,7 +70,6 @@ public class SpuWxRestApi {
     public WrapperResponse getFeature(@RequestBody SpuQry qry) {
         return WrapperResponse.success(spuQueryService.getExcellent(qry));
     }*/
-
 
     @PostMapping(value = "/getSpuInfoBySpuId", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(httpMethod = "POST", value = "根据产品id查询产品详细信息")
@@ -91,7 +89,6 @@ public class SpuWxRestApi {
         return WrapperResponse.success(tagQueryService.getAll());
     }
 
-
     @GetMapping("/getBrands")
     @ApiOperation(httpMethod = "GET", value = "查询品牌集合")
     public WrapperResponse getBrands() {
@@ -104,20 +101,17 @@ public class SpuWxRestApi {
         return WrapperResponse.success(queryService.getCategorysByPage(qry));
     }
 
-
     @PostMapping("/getFirstPageCategorys")
     @ApiOperation(value = "查询首页类目集合")
     public WrapperResponse getFirstPageCategorys(@RequestBody CategoryQry qry) {
         return WrapperResponse.success(queryService.getFirstPageCategorys(qry));
     }
 
-
     @GetMapping("/getFirstLattice")
     @ApiOperation(value = "首页菜单格子查询")
     public WrapperResponse getFirstLattice() {
         return WrapperResponse.success(latticeQueryService.getFirstPageLattice());
     }
-
 
     /*@PostMapping("/queryDisProduct")
     @ApiOperation(httpMethod = "POST", value = "分页查询分销产品查询接口")

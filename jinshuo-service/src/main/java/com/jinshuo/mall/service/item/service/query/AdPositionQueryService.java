@@ -2,12 +2,13 @@ package com.jinshuo.mall.service.item.service.query;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.item.ad.AdPosition;
 import com.jinshuo.mall.service.item.application.assermbler.AdAssembler;
 import com.jinshuo.mall.service.item.application.dto.AdPositionDto;
 import com.jinshuo.mall.service.item.application.qry.AdQry;
 import com.jinshuo.mall.service.item.mybatis.AdPositionRepo;
-import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * Created by 19458 on 2019/7/19.
  */
-@Data
+@Slf4j
 @Service
 public class AdPositionQueryService {
 
@@ -42,7 +43,7 @@ public class AdPositionQueryService {
 
     public PageInfo getPageInfo(AdQry qry) {
         if (null == qry.getShopId()) {
-            qry.setShopId(10088l);
+            qry.setShopId(DefaultShopId.SHOPID);
         }
         PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
         AdPosition temp = new AdPosition();
@@ -80,8 +81,9 @@ public class AdPositionQueryService {
      * @return
      */
     public AdPositionDto queryAdByCode(AdQry qry) {
+        log.info(" -- 根据广告位code查询广告,输入参数：", qry);
         if (null == qry.getShopId()) {
-            qry.setShopId(10088l);
+            qry.setShopId(DefaultShopId.SHOPID);
         }
         if (StringUtils.isBlank(qry.getCode())) {
             return null;
@@ -91,7 +93,7 @@ public class AdPositionQueryService {
             return null;
         }
         AdPositionDto adPositionDto = AdAssembler.assembleDto(adPosition);
-        adPositionDto.setList(advertisementQueryService.queryByUsedPositionId(Long.parseLong(adPositionDto.getId()),qry.getAreaName()));
+        adPositionDto.setList(advertisementQueryService.queryByUsedPositionId(Long.parseLong(adPositionDto.getId()), qry.getAreaName()));
         return adPositionDto;
     }
 

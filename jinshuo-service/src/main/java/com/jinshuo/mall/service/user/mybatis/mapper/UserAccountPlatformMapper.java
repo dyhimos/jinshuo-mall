@@ -20,7 +20,7 @@ import java.util.List;
 @Mapper
 public interface UserAccountPlatformMapper {
 
-    @InsertProvider(type = DynamicSql.class, method = "createUserAccountPlatformSql")
+    @InsertProvider(type = UserDynamicSql.class, method = "createUserAccountPlatformSql")
     void save(UserAccountPlatform userAccountPlatform);
 
     @ResultMap(value = "UserAccountPlatformResult")
@@ -41,7 +41,7 @@ public interface UserAccountPlatformMapper {
      *
      * @param userAccountPlatform
      */
-    @UpdateProvider(type = DynamicSql.class, method = "updateUserAccountPlatformSql")
+    @UpdateProvider(type = UserDynamicSql.class, method = "updateUserAccountPlatformSql")
     void update(UserAccountPlatform userAccountPlatform);
 
 

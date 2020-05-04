@@ -1,5 +1,6 @@
 package com.jinshuo.mall.service.item.service.query;
 
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.item.spec.Spec;
 import com.jinshuo.mall.service.item.application.assermbler.SpecAssembler;
 import com.jinshuo.mall.service.item.application.dto.SpecDto;
@@ -37,7 +38,7 @@ public class SpecQueryService {
 
     public List<SpecDto> getSpecList(SpecQry qry) {
         if (null == qry.getShopId()) {
-            qry.setShopId(10088l);
+            qry.setShopId(DefaultShopId.SHOPID);
         }
         List<SpecDto> dtos = specRepo.findAll(qry.getShopId()).stream().map(spec -> SpecAssembler.assembleSpecDto(spec)).collect(Collectors.toList());
         dtos.forEach(specDto -> {

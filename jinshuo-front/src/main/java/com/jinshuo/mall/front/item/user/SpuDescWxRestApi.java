@@ -15,7 +15,7 @@ import javax.validation.Valid;
  * Created by 19458 on 2019/7/18.
  */
 @RestController
-@RequestMapping("/v1/wx/specDesc")
+@RequestMapping("itemApi/v1/wx/specDesc")
 public class SpuDescWxRestApi {
 
     @Autowired

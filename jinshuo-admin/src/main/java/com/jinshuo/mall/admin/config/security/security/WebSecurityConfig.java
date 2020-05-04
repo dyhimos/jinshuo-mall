@@ -58,7 +58,9 @@ public class WebSecurityConfig {
                             "/v1/api/manager/login",
                             "/v1/manager/ad/**",
                             "/v1/api/user/login",
+                            "/itemApi/v1/wx/**",
                             "/v2/**",
+                            "/jinShuoApi/v1/wx/public/**",
                             "/swagger-ui.html",
                             "/swagger-resources/**",
                             "/webjars/**").permitAll()

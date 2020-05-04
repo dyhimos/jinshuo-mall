@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Api(description = "广告管理接口")
-@RequestMapping("/v1/wx/ad")
+@RequestMapping("itemApi/v1/wx/ad")
 public class AdWxRestApi {
 
     @Autowired

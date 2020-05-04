@@ -65,7 +65,7 @@ public interface VisitorLogMapper {
     List<VisitorLog> queryNotice(VisitorLog visitorLog);
 
     @ResultMap("visitorLogResult")
-    @SelectProvider(type = DynamicSql.class, method = "countMember")
+    @SelectProvider(type = UserDynamicSql.class, method = "countMember")
     List<VisitorLog> countMember(VisitorCountQry qry);
 
     @ResultMap("visitorLogResult")

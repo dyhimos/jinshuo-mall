@@ -19,7 +19,7 @@ import java.util.List;
 @Mapper
 public interface UserAccountMapper {
 
-    @InsertProvider(type = DynamicSql.class, method = "createUserAccountSql")
+    @InsertProvider(type = UserDynamicSql.class, method = "createUserAccountSql")
     void save(UserAccount userAccount);
 
     @Results(

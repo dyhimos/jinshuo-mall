@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Api(description = "活动管理接口")
-@RequestMapping("/v1/wx/topic")
+@RequestMapping("itemApi/v1/wx/topic")
 public class TopicWxRestApi {
 
     @Autowired

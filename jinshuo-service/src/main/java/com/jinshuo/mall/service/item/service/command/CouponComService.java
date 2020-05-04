@@ -1,6 +1,7 @@
 package com.jinshuo.mall.service.item.service.command;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.core.exception.item.IcBizException;
 import com.jinshuo.core.exception.item.IcReturnCode;
 import com.jinshuo.mall.domain.item.coupon.Coupon;
@@ -42,7 +43,7 @@ public class CouponComService {
     public void create(CouponCreateCmd cmd) {
         log.info(" -- 新增优惠券,输入参数：" + JSONObject.toJSONString(cmd));
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088l);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         if (null == cmd.getGainMethod()) {
             cmd.setGainMethod(1);
@@ -62,7 +63,7 @@ public class CouponComService {
     public void update(CouponUpdateCmd cmd) {
         log.info(" -- 修改优惠券,输入参数：" + JSONObject.toJSONString(cmd));
         if (null == cmd.getShopId()) {
-            cmd.setShopId(10088l);
+            cmd.setShopId(DefaultShopId.SHOPID);
         }
         if (null == cmd.getGainMethod()) {
             cmd.setGainMethod(1);

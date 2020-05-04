@@ -3,6 +3,7 @@ package com.jinshuo.mall.service.item.service.query;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jinshuo.core.constant.DefaultShopId;
 import com.jinshuo.mall.domain.item.topic.Topic;
 import com.jinshuo.mall.service.item.application.assermbler.TopicAssembler;
 import com.jinshuo.mall.service.item.application.dto.TopicDto;
@@ -34,7 +35,7 @@ public class TopicQueryService {
      * @return
      */
     public PageInfo getTopicPage(TopicQry qry) {
-        Long shopId = 10088l;
+        Long shopId = DefaultShopId.SHOPID;
         Topic temp = Topic.builder()
                 .shopId(shopId)
                 .type(qry.getType())
@@ -55,7 +56,7 @@ public class TopicQueryService {
      * @return
      */
     public List<TopicDto> getTopics(Integer type) {
-        Long shopId = 10088l;
+        Long shopId = DefaultShopId.SHOPID;
         Topic temp = Topic.builder()
                 .shopId(shopId)
                 .type(type)

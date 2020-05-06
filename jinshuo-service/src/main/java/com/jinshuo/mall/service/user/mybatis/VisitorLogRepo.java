@@ -1,7 +1,9 @@
 package com.jinshuo.mall.service.user.mybatis;
 
 import com.jinshuo.mall.domain.user.model.statistics.VisitorLog;
+import com.jinshuo.mall.service.user.application.dto.UserVisitorLogDto;
 import com.jinshuo.mall.service.user.application.qry.StatisticsQry;
+import com.jinshuo.mall.service.user.application.qry.UserVisitorLogQry;
 import com.jinshuo.mall.service.user.application.qry.VisitorCountQry;
 import com.jinshuo.mall.service.user.mybatis.mapper.VisitorLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,9 @@ import java.util.List;
 @Repository
 public class VisitorLogRepo {
 
-    @Autowired(required = false)
+    @Autowired
     private VisitorLogMapper visitorLogMapper;
+
 
     public int save(VisitorLog visitorLog) {
         return visitorLogMapper.create(visitorLog);
@@ -50,4 +53,13 @@ public class VisitorLogRepo {
     public Integer conversionRateListRegist(Date date) {
         return visitorLogMapper.conversionRateListRegist(date);
     }
+    /**
+     * 查询全部日志列表
+     * @param query
+     * @return
+     */
+    public List<UserVisitorLogDto> findAll(UserVisitorLogQry query) {
+        return visitorLogMapper.findAll(query);
+    }
+
 }

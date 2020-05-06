@@ -66,7 +66,7 @@ public class WebSecurityConfig {
                             "/webjars/**").permitAll()
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .anyRequest().authenticated()
-                    .and().formLogin().loginProcessingUrl("/api/login1").usernameParameter("username").passwordParameter("password").permitAll()
+                    .and().formLogin().loginProcessingUrl("/v1/manager/pclogin/login").usernameParameter("username").passwordParameter("password").permitAll()
                     .successHandler(successHandler)
                     .failureHandler(failHandler)
                     .and().exceptionHandling().authenticationEntryPoint(entryPoint);

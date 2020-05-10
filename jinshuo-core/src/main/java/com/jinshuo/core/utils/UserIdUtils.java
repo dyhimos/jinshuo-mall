@@ -9,6 +9,8 @@ import com.jinshuo.core.exception.item.IcReturnCode;
 import com.jinshuo.core.model.UserAuthDto;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 /**
  * Created by 19458 on 2019/8/9.
@@ -19,8 +21,13 @@ public class UserIdUtils {
     public static Long getUserId() {
         Long userId = null;
         try {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             //userId = UserUtils.getCurrentFrontUserId(UserIdUtils.JWTSECRET);
-            userId = Long.valueOf(UserUtils.getMerchantUserInfo().getId());
+            //userId = Long.valueOf(UserUtils.getMerchantUserInfo().getId());
+            log.info(" -- user" + JSONObject.toJSONString(user));
+            userId =  165475033416728576L;
+            //user.getUsername();
+            //SpringUtil.getBean();
         } catch (Exception e) {
             log.error("系統错误,", e);
             throw new IcBizException(IcReturnCode.IC201014.getCode(), IcReturnCode.IC201014.getMsg());

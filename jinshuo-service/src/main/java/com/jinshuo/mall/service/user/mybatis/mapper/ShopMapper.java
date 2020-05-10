@@ -17,13 +17,13 @@ public interface ShopMapper {
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("INSERT INTO shop(" +
-            "id,name,merchant_id,type,shop_status," +
+            "id,name,merchant_id,type,shop_status,publish_agreement," +
             "logo,introduce,customer_tel,work_type,star_time,end_time," +
-            "create_date,update_date,remarks) " +
+            "create_date,update_date,remarks,free_instructions,regist_agreement,customer_service,buy_wool_need_know) " +
             "VALUES(" +
-            "#{shopId.id},#{name},#{merchantId},#{type},#{shopStatus}," +
+            "#{shopId.id},#{name},#{merchantId},#{type},#{shopStatus},#{publishAgreement}," +
             "#{logo},#{introduce},#{customerTel},#{workType},#{starTime},#{endTime}," +
-            "#{createDate},#{updateDate},#{remarks})")
+            "#{createDate},#{updateDate},#{remarks},#{freeInstructions},#{registAgreement},#{customerService},#{buyWoolNeedKnow})")
     int create(Shop shop);
 
     @Results(
@@ -34,12 +34,17 @@ public interface ShopMapper {
                     @Result(property = "merchantId", column = "merchant_id"),
                     @Result(property = "type", column = "type"),
                     @Result(property = "shopStatus", column = "shop_status"),
+                    @Result(property = "publishAgreement", column = "publish_agreement"),
                     @Result(property = "logo", column = "logo"),
                     @Result(property = "introduce", column = "introduce"),
                     @Result(property = "customerTel", column = "customer_tel"),
                     @Result(property = "workType", column = "work_type"),
                     @Result(property = "starTime", column = "star_time"),
                     @Result(property = "endTime", column = "end_time"),
+                    @Result(property = "freeInstructions", column = "free_instructions"),
+                    @Result(property = "registAgreement", column = "regist_agreement"),
+                    @Result(property = "customerService", column = "customer_service"),
+                    @Result(property = "buyWoolNeedKnow", column = "buy_wool_need_know"),
                     @Result(property = "status.code", column = "status"),
                     @Result(property = "version", column = "version"),
                     @Result(property = "remarks", column = "remarks"),
@@ -66,8 +71,9 @@ public interface ShopMapper {
     List<Shop> queryList(Shop shop);
 
     @Update("UPDATE  shop SET name=#{name} " +
-            ",logo=#{logo},introduce=#{introduce},customer_tel=#{customerTel},work_type=#{workType}" +
-            ",star_time=#{starTime},end_time=#{endTime} " +
+            ",logo=#{logo},introduce=#{introduce},customer_tel=#{customerTel},work_type=#{workType},publish_agreement=#{publishAgreement}" +
+            ",star_time=#{starTime},end_time=#{endTime},free_instructions=#{freeInstructions}," +
+            "regist_agreement=#{registAgreement},customer_service=#{customerService},buy_wool_need_know=#{buyWoolNeedKnow} " +
             " WHERE id = #{shopId.id} ")
     int update(Shop shop);
 }

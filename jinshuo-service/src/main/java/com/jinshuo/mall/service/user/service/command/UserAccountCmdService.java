@@ -34,7 +34,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException;
@@ -45,9 +48,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -61,6 +66,9 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Service
 public class UserAccountCmdService {
+
+    @Autowired
+    private JwtTokenProviderService jwtService;
 
     @Autowired
     private UserAccountPlatformRepo userAccountPlatformRepo;
@@ -129,7 +137,7 @@ public class UserAccountCmdService {
         String username = StringUtils.trim(appLoginCmd.getUsername());
         String password = StringUtils.trim(appLoginCmd.getPassword());
         //检查用户名和密码是否正确
-        UserAccount userAccount = UserAccount.checkLoginInfoLogin(username, password, 1);
+        UserAccount userAccount = checkLoginInfoLogin(username, password, 1);
 
         //UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         //封装自定义参数
@@ -558,7 +566,7 @@ public class UserAccountCmdService {
     public void updatePassword(LoginPasswordCmd cmd) {
         UserAuthDto dto = UserIdUtils.getUser();
         //检查用户名和密码是否正确
-        UserAccount userAccount = UserAccount.checkLoginInfoLogin(dto.getUsername(), cmd.getPassword(), 5);
+        UserAccount userAccount = checkLoginInfoLogin(dto.getUsername(), cmd.getPassword(), 5);
         userAccount.setPassword(BPwdEncoderUtils.BCryptPassword(cmd.getNewPassword()));
         userAccountRepo.updatePassword(userAccount);
     }
@@ -753,7 +761,7 @@ public class UserAccountCmdService {
 
 
     /**
-     * 后台登录
+     * 后台登录 js
      *
      * @param appLoginCmd
      * @return
@@ -762,17 +770,19 @@ public class UserAccountCmdService {
         String username = StringUtils.trim(appLoginCmd.getUsername());
         String password = StringUtils.trim(appLoginCmd.getPassword());
         //检查用户名和密码是否正确 管理后台用户类型为5
-        UserAccount userAccount = UserAccount.checkLoginInfoLogin(username, password, 5);
-
-        //UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        //封装自定义参数
+        UserAccount userAccount = checkLoginInfoLogin(username, password, 5);
         UserAuthDto userAuthDto = null;
         if (userAccount != null) {
             userAuthDto = new UserAuthDto(userAccount.getUserAccountId().getId().toString(), userAccount.getUsername(),
                     userAccount.getNickname(), userAccount.getPassword(), userAccount.getShopId(), true);
         }
-
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userAuthDto, null, userAuthDto.getAuthorities());
+        MerchantLoginInfoDto dto = MerchantLoginInfoDto.builder()
+                .shops(shopQueryService.getList(userAccount.getMerchantId()))
+                .username(userAccount.getUsername())
+                .token(jwtService.createJwtToken(appLoginCmd.getUsername()))
+                .avatar("/10088/1/129603212297633792/co/39d0b82f-0200-4bbc-9106-c811858bb08d.png")
+                .build();
+        /*UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userAuthDto, null, userAuthDto.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         //String header = request.getHeader("Authorization");
@@ -800,13 +810,7 @@ public class UserAccountCmdService {
 
         OAuth2Authentication oAuth2Authentication = new OAuth2Authentication(oAuth2Request, authentication);
         //创建token
-        //OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
-        MerchantLoginInfoDto dto = MerchantLoginInfoDto.builder()
-                .shops(shopQueryService.getList(userAccount.getMerchantId()))
-                .username(userAccount.getUsername())
-                .token(null)
-                .avatar("/10088/1/129603212297633792/co/39d0b82f-0200-4bbc-9106-c811858bb08d.png")
-                .build();
+        OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);*/
         return dto;
     }
 
@@ -915,5 +919,39 @@ public class UserAccountCmdService {
             throw new UcBizException(UcReturnCode.UC200021.getMsg(), UcReturnCode.UC200021.getCode());
         }
         userAccountRepo.deleteUserAccount(userAccountId);
+    }
+
+    public UserDetails getUserInfo(String username) {
+        List<UserAccount> userAccounts = userAccountRepo.findByUserNameAndType(username, 5);
+        if (null == userAccounts || userAccounts.size() == 0) {
+            throw new UcBizException(UcReturnCode.UC200009.getMsg());
+        }
+        List<String> roleList = new ArrayList<>();
+        List<GrantedAuthority> authorities = roleList.stream()
+                .map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+        return new org.springframework.security.core.userdetails
+                .User(username, userAccounts.get(0).getPassword(), authorities);
+    }
+
+    /**
+     * 检查登陆信息
+     *
+     * @param username
+     * @param password
+     * @param type
+     * @return
+     */
+    public UserAccount checkLoginInfoLogin(String username, String password, Integer type) {
+        List<UserAccount> userAccounts = userAccountRepo.findByUserNameAndType(username, type);
+        if (null == userAccounts || userAccounts.size() == 0) {
+            throw new UcBizException(UcReturnCode.UC200009.getMsg(), UcReturnCode.UC200009.getCode());
+        }
+        UserAccount userAccount = userAccounts.get(0);
+        if (StringUtils.isNotBlank(password)) {
+            if (!BPwdEncoderUtils.matches(password, userAccount.getPassword())) {
+                throw new UcBizException(UcReturnCode.UC200010.getMsg(), UcReturnCode.UC200010.getCode());
+            }
+        }
+        return userAccount;
     }
 }

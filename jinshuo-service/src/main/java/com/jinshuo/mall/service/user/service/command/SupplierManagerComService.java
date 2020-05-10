@@ -63,7 +63,7 @@ public class SupplierManagerComService {
             supplierManager.insert();
             UserAccount userAccount = buildUser(cmd);
             supplierManager.setUserAccountId(userAccount.getUserAccountId().getId());
-            List<UserAccount> list = userAccount.checkUserName(cmd.getMobile(), 4);
+            List<UserAccount> list = checkUserName(cmd.getMobile(), 4);
             if (null != list && list.size() > 0) {
                 throw new UcBizException(UcReturnCode.UC200030.getMsg(), UcReturnCode.UC200030.getCode());
             }
@@ -77,7 +77,7 @@ public class SupplierManagerComService {
             supplierManager.update(cmd.getName(), cmd.getMobile(), cmd.getIdCard(), cmd.getRole(), cmd.getSex(), cmd.getSupplierManagerStatus());
             UserAccount userAccount = userAccountRepo.findById(new UserAccountId(supplierManager.getUserAccountId()));
             log.info(" -- " + cmd.getMobile() + JSONObject.toJSONString(cmd));
-            List<UserAccount> list = userAccount.checkUserName(cmd.getMobile(), 4);
+            List<UserAccount> list = checkUserName(cmd.getMobile(), 4);
             if (list.size() > 0) {
                 if (list.size() == 1) {
                     if ((list.get(0).getUserAccountId().getId().longValue()) != userAccount.getUserAccountId().getId().longValue()) {
@@ -137,6 +137,10 @@ public class SupplierManagerComService {
                 .userStatus(UserAccountStatusEnums.ACCOUNT_ENABLE)
                 .build();
         return userAccount;
+    }
+
+    public List<UserAccount> checkUserName(String username, Integer type) {
+        return null;
     }
 
 }

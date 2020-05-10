@@ -59,6 +59,7 @@ public class WebSecurityConfig {
                             "/v1/manager/ad/**",
                             "/v1/api/user/login",
                             "/itemApi/v1/wx/**",
+                            "/v1/manager/pclogin/login",
                             "/v2/**",
                             "/jinShuoApi/v1/wx/public/**",
                             "/swagger-ui.html",
@@ -66,7 +67,7 @@ public class WebSecurityConfig {
                             "/webjars/**").permitAll()
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .anyRequest().authenticated()
-                    .and().formLogin().loginProcessingUrl("/v1/manager/pclogin/login").usernameParameter("username").passwordParameter("password").permitAll()
+                    .and().formLogin().loginProcessingUrl("/v1/manager/pclogin/login1").usernameParameter("username").passwordParameter("password").permitAll()
                     .successHandler(successHandler)
                     .failureHandler(failHandler)
                     .and().exceptionHandling().authenticationEntryPoint(entryPoint);

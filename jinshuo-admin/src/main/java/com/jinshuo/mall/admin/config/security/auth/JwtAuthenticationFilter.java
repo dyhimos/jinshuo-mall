@@ -1,8 +1,8 @@
 package com.jinshuo.mall.admin.config.security.auth;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jinshuo.core.constant.AuthParameters;
 import com.jinshuo.core.utils.RandomUtil;
-import com.jinshuo.mall.admin.config.security.userService.BaseUserService;
 import com.jinshuo.mall.admin.config.security.userService.UserLoginService;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
@@ -30,9 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    private BaseUserService userService;
 
     @Autowired
     private UserLoginService userLoginService;

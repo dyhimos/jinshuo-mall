@@ -15,4 +15,12 @@ public class UrlUtil {
         //return URL2 + str;
         return  str;
     }
+
+    public static String getRelativelyUrl(String str) {
+        if (StringUtils.isBlank(str)) {
+            return "";
+        }
+        //return str.replace(URL2,"");
+        return str;
+    }
 }

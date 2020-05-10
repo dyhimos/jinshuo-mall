@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author dongyh
@@ -112,51 +111,6 @@ public class UserAccount {
         this.loginCount = loginCount;
         this.userStatus = userStatus;
         return this;
-    }
-
-
-    /**
-     * 检查登录信息是否正确
-     *
-     * @param username
-     */
-    public static UserAccount checkLoginInfoLogin(String username, String password, Integer type) {
-       /* List<UserAccount> userAccountList = SpringUtil.getBean(UserAccountRepo.class).findByUserNameAndType(username,type);
-        if(userAccountList.size()==0){
-            throw new UcBizException(UcReturnCode.UC200009.getMsg(),UcReturnCode.UC200009.getCode());
-        }
-        UserAccount userAccount = userAccountList.get(0);
-        if(StringUtils.isNotBlank(password)){
-            if(!BPwdEncoderUtils.matches(password,userAccount.getPassword())){
-                throw new UcBizException(UcReturnCode.UC200010.getMsg(),UcReturnCode.UC200010.getCode());
-            }
-        }
-        return userAccount;*/
-        return null;
-    }
-
-    /**
-     * 检查登录信息是否正确
-     *
-     * @param username
-     */
-    public static UserAccount checkLoginInfo(String username, String password) {
-        /*UserAccount userAccount = SpringUtil.getBean(UserAccountRepo.class).findByUserName(username);
-        if(userAccount==null){
-            throw new UcBizException(UcReturnCode.UC200009.getMsg(),UcReturnCode.UC200009.getCode());
-        }
-        if(StringUtils.isNotBlank(password)){
-            if(!BPwdEncoderUtils.matches(password,userAccount.getPassword())){
-                throw new UcBizException(UcReturnCode.UC200010.getMsg(),UcReturnCode.UC200010.getCode());
-            }
-        }
-        return userAccount;*/
-        return null;
-    }
-
-    public List<UserAccount> checkUserName(String userName, Integer type) {
-        //return SpringUtil.getBean(UserAccountRepo.class).findByUserNameAndType(userName, type);
-        return null;
     }
 
     public UserAccount loginLog() {

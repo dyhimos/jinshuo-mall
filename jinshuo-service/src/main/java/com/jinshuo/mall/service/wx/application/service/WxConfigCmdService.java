@@ -109,7 +109,7 @@ public class WxConfigCmdService {
             throw new UcBizException(UcReturnCode.UC200007.getMsg(), UcReturnCode.UC200007.getCode());
         }
         Shop shop = shopQueryService.getById(shopIdCmd.getShopId());
-        return new WxConfigDto(wxConfig.getAppId(), OpenPlatformConfig.APPID, 0, shop.getName(), shop.getLogo(), shop.getLinkMan(), shop.getPhone(), shop.getSketch());
+        return new WxConfigDto(wxConfig.getAppId(), OpenPlatformConfig.APPID, 0, shop.getName(), shop.getLogo(), "", "", "");
     }
 
 

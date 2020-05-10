@@ -1,4 +1,4 @@
-package com.jinshuo.mall.admin.config.security.auth;
+package com.jinshuo.core.constant;
 
 /**
  * 权限设置常量

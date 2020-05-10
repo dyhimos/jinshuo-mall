@@ -1,5 +1,6 @@
 package com.jinshuo.mall.admin.config.security.auth;
 
+import com.jinshuo.core.constant.AuthParameters;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ExpresssCodeRepo {
 
-    @Autowired(required = false)
+    @Autowired
     private ExpressCodeMapper mapper;
 
 

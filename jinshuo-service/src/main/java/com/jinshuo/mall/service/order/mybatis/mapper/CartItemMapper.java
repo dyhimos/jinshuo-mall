@@ -2,6 +2,7 @@ package com.jinshuo.mall.service.order.mybatis.mapper;
 
 import com.jinshuo.mall.domain.order.cart.CartItem;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @Created by dyh
  */
 @Mapper
+@Component
 public interface CartItemMapper {
 
     @Options(useGeneratedKeys = true, keyProperty = "id")

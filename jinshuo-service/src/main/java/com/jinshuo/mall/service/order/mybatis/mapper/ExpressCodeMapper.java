@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Component;
 
 /**
  * 快递mapper
@@ -15,6 +16,7 @@ import org.apache.ibatis.annotations.Select;
  * @Created by dongyh
  */
 @Mapper
+@Component
 public interface ExpressCodeMapper {
 
     @Results(

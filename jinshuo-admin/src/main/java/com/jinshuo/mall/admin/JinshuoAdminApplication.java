@@ -10,7 +10,9 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableSwagger2
 @EnableAutoConfiguration
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.jinshuo.mall.admin","com.jinshuo.mall.service","com.jinshuo.mall.front"})
+@ComponentScan(basePackages = {"com.jinshuo.mall.admin","com.jinshuo.mall.service",
+        "com.jinshuo.mall.service.order.mybatis.mapper",
+        "com.jinshuo.mall.front"})
 @MapperScan(basePackages = {"com.jinshuo.mall"})
 public class JinshuoAdminApplication {
 
